@@ -125,6 +125,40 @@ footer{background:var(--slate-900);padding:40px;margin-top:0}
 .footer-links-row{display:flex;gap:20px}
 .footer-links-row a{font-size:13px;color:rgba(255,255,255,.4);transition:color .15s}
 .footer-links-row a:hover{color:rgba(255,255,255,.8)}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:0 16px;height:56px}
+  .nav-links{display:none}
+  .btn{padding:7px 14px;font-size:12px}
+
+  .about-hero{padding:90px 20px 56px}
+  .about-hero h1{font-size:28px;letter-spacing:-.5px}
+  .about-hero p{font-size:15px}
+
+  .container{padding:0 20px}
+  section{padding:48px 0}
+  h2{font-size:24px}
+  p,.lead{font-size:15px}
+
+  .mission-block{padding:28px 20px}
+  .mission-quote{font-size:18px}
+
+  .usecase-grid{grid-template-columns:1fr}
+  .values-grid{grid-template-columns:1fr}
+  .proof-grid{grid-template-columns:1fr}
+
+  .roadmap-title{font-size:15px}
+
+  .about-cta{padding:32px 20px}
+  .about-cta h2{font-size:22px}
+  .wl-form{flex-direction:column;align-items:stretch}
+  .waitlist-input{min-width:unset;width:100%}
+
+  footer{padding:28px 20px}
+  .footer-inner{flex-direction:column;gap:16px}
+  .footer-links-row{flex-wrap:wrap;gap:12px}
+}
 </style>
 </head>
 <body>

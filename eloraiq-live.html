@@ -295,6 +295,59 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
 .sso-status{font-size:11px;color:var(--tx3);margin-top:1px}
 .color-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;outline:2px solid transparent;outline-offset:2px}
 .color-dot.active{outline-color:var(--p600)}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:768px){
+  .sb{display:none}
+  .main{width:100%}
+
+  .tb{padding:10px 14px}
+  .tb-title{font-size:14px}
+  .tb-sub{font-size:10px}
+
+  .metrics{grid-template-columns:repeat(2,1fr);padding:12px 14px;gap:8px}
+  .mc-val{font-size:18px}
+
+  .a-row{padding:10px 12px}
+  .a-icon{width:30px;height:30px}
+  .a-name{font-size:12px}
+  .a-meta{font-size:10px}
+
+  .cr-layout{flex-direction:column}
+  .cr-chat{width:100%;min-width:unset;height:60vh;border-right:none;border-bottom:.5px solid var(--bd1)}
+  .prev-panel{padding:12px}
+
+  .lk-sec{padding:12px 14px}
+  .proc-grid{grid-template-columns:1fr;padding:0 14px 14px}
+
+  .set-layout{flex-direction:column}
+  .set-nav{width:100%;border-right:none;border-bottom:.5px solid var(--bd1);padding:8px;display:flex;flex-wrap:wrap;gap:4px}
+  .set-ni{padding:5px 10px;font-size:12px}
+  .set-main{padding:14px}
+  .set-input{width:100%}
+  .set-row{flex-direction:column;align-items:flex-start;gap:8px}
+
+  .res-grid{grid-template-columns:1fr}
+  .res-card.full{grid-column:1}
+
+  .test-aside{width:160px;min-width:160px}
+  .timer-v{font-size:16px}
+
+  .cand-lobby{padding:16px}
+  .lobby-card{padding:20px}
+  .lobby-title{font-size:16px}
+  .lobby-meta{gap:12px}
+
+  .api-banner{flex-wrap:wrap;gap:8px;padding:8px 12px}
+  .api-key-inp{width:100%}
+}
+@media(max-width:480px){
+  .test-lay{flex-direction:column}
+  .test-aside{width:100%;min-width:unset;border-left:none;border-top:.5px solid var(--bd1);max-height:160px;overflow-x:auto;display:flex;gap:12px;align-items:center;padding:10px 14px}
+  .timer-blk{min-width:80px}
+  .q-nav-grid{display:none}
+  .proctor-note{display:none}
+}
 </style>
 </head>
 <body>

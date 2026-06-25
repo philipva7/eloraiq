@@ -217,6 +217,54 @@ footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,0.06);pad
 
 /* ── LOGO SVG ── */
 .logo-svg{flex-shrink:0}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:0 16px;height:56px}
+  .nav-links{display:none}
+  .btn.btn-p{padding:7px 14px;font-size:12px}
+
+  .hero{padding:90px 20px 60px}
+  .hero h1{font-size:32px;letter-spacing:-1px}
+  .hero-sub{font-size:15px}
+  .wl-form{flex-direction:column;align-items:stretch}
+  .wl-inp{min-width:unset;width:100%}
+  .hero-preview{display:none}
+
+  .stats-strip{padding:28px 20px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:20px}
+  .stat-val{font-size:26px}
+
+  .pad,.padv{padding:56px 20px}
+  .wrap{padding:0}
+  .wrap-sm{padding:0}
+
+  .how-grid{grid-template-columns:1fr;gap:12px}
+  .uc-grid{grid-template-columns:1fr;gap:12px}
+  .feat-grid{grid-template-columns:1fr;gap:12px}
+  .proof-grid{grid-template-columns:1fr;gap:12px}
+  .price-grid{grid-template-columns:1fr;gap:16px;max-width:100%}
+
+  .video-bg{padding:56px 20px}
+  .video-wrap{border-radius:16px}
+
+  .sec-title{font-size:26px;letter-spacing:-.5px}
+  .sec-sub{font-size:15px}
+
+  footer{padding:40px 20px 24px}
+  .footer-top{flex-direction:column;gap:28px}
+  .footer-cols{gap:28px}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .price-grid{padding:0}
+  .plan{padding:22px}
+}
+@media(max-width:768px){
+  #mobileMenuBtn{display:block !important}
+  #mobileMenu a{display:block;padding:10px 12px;border-radius:8px}
+}
 </style>
 </head>
 <body>
@@ -249,6 +297,19 @@ footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,0.06);pad
     <a href="about.html" class="nl">About</a>
   </div>
   <a href="#waitlist" class="btn btn-p">Join waitlist <i class="ti ti-arrow-right"></i></a>
+  <!-- Mobile nav toggle -->
+  <button id="mobileMenuBtn" onclick="toggleMobileMenu()" style="display:none;background:none;border:none;cursor:pointer;padding:6px;margin-left:12px" aria-label="Menu">
+    <i class="ti ti-menu-2" style="font-size:22px;color:var(--sl800)"></i>
+  </button>
+  <!-- Mobile menu dropdown -->
+  <div id="mobileMenu" style="display:none;position:fixed;top:56px;left:0;right:0;background:#fff;border-bottom:.5px solid var(--sl200);padding:8px 16px 16px;z-index:199;flex-direction:column;gap:2px">
+    <a href="#how" class="nl" onclick="toggleMobileMenu()">How it works</a>
+    <a href="#usecases" class="nl" onclick="toggleMobileMenu()">Use cases</a>
+    <a href="#features" class="nl" onclick="toggleMobileMenu()">Features</a>
+    <a href="#pricing" class="nl" onclick="toggleMobileMenu()">Pricing</a>
+    <a href="about.html" class="nl" onclick="toggleMobileMenu()">About</a>
+    <a href="#waitlist" class="btn btn-p" style="margin-top:8px;justify-content:center" onclick="toggleMobileMenu()">Join waitlist</a>
+  </div>
 </nav>
 
 <!-- ══ HERO ══ -->
@@ -680,6 +741,14 @@ window.addEventListener('scroll', () => {
 
 document.getElementById('heroEmail').addEventListener('keydown', e => { if (e.key === 'Enter') joinWaitlist('heroEmail','heroSuccess','heroForm'); });
 document.getElementById('ctaEmail').addEventListener('keydown', e => { if (e.key === 'Enter') joinWaitlist('ctaEmail','ctaSuccess','ctaForm'); });
+
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('mobileMenuBtn');
+  const isOpen = menu.style.display === 'flex';
+  menu.style.display = isOpen ? 'none' : 'flex';
+  btn.innerHTML = isOpen ? '<i class="ti ti-menu-2" style="font-size:22px;color:var(--sl800)"></i>' : '<i class="ti ti-x" style="font-size:22px;color:var(--sl800)"></i>';
+}
 </script>
 </body>
 </html>
