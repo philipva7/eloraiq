@@ -383,7 +383,11 @@ footer{background:var(--slate-900);padding:40px;margin-top:0}
 </footer>
 
 <script>
-function joinWaitlist() {
+
+const SB_URL = 'https://jbtwxuxrxuldivtidqcs.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidHd4dXhyeHVsZGl2dGlkcWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTU5NTAsImV4cCI6MjA5Nzg3MTk1MH0.2DikBCmMqomg8v3Fb9sI87ka9_c17qSF96nn0bSCKA0';
+
+async function joinWaitlist() {
   const input = document.getElementById('aboutEmail');
   const email = (input.value || '').trim();
   if (!email || !email.includes('@')) {
@@ -391,10 +395,26 @@ function joinWaitlist() {
     setTimeout(() => { input.style.borderColor = ''; }, 2000);
     return;
   }
-  const emails = JSON.parse(localStorage.getItem('eloraiq_waitlist') || '[]');
-  if (!emails.includes(email)) { emails.push(email); localStorage.setItem('eloraiq_waitlist', JSON.stringify(emails)); }
-  document.getElementById('aboutWaitlistForm').style.display = 'none';
-  document.getElementById('aboutSuccess').style.display = 'flex';
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SB_ANON,
+        'Authorization': 'Bearer ' + SB_ANON,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email: email, source: 'about' })
+    });
+    if (res.ok || res.status === 409) {
+      document.getElementById('aboutWaitlistForm').style.display = 'none';
+      document.getElementById('aboutSuccess').style.display = 'flex';
+    } else { throw new Error(); }
+  } catch(e) {
+    localStorage.setItem('eloraiq_waitlist_' + email, '1');
+    document.getElementById('aboutWaitlistForm').style.display = 'none';
+    document.getElementById('aboutSuccess').style.display = 'flex';
+  }
 }
 document.getElementById('aboutEmail').addEventListener('keydown', e => { if (e.key === 'Enter') joinWaitlist(); });
 window.addEventListener('scroll', () => {

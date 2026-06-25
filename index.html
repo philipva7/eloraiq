@@ -708,7 +708,11 @@ footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,0.06);pad
 </footer>
 
 <script>
-function joinWaitlist(inputId, successId, formId) {
+
+const SB_URL = 'https://jbtwxuxrxuldivtidqcs.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidHd4dXhyeHVsZGl2dGlkcWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTU5NTAsImV4cCI6MjA5Nzg3MTk1MH0.2DikBCmMqomg8v3Fb9sI87ka9_c17qSF96nn0bSCKA0';
+
+async function joinWaitlist(inputId, successId, formId) {
   const input = document.getElementById(inputId);
   const email = (input.value || '').trim();
   if (!email || !email.includes('@')) {
@@ -717,10 +721,35 @@ function joinWaitlist(inputId, successId, formId) {
     setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'Enter your work email'; }, 2500);
     return;
   }
-  const emails = JSON.parse(localStorage.getItem('eloraiq_waitlist') || '[]');
-  if (!emails.includes(email)) { emails.push(email); localStorage.setItem('eloraiq_waitlist', JSON.stringify(emails)); }
-  document.getElementById(formId).style.display = 'none';
-  document.getElementById(successId).style.display = 'flex';
+
+  // Determine source from page
+  const source = window.location.pathname.includes('about') ? 'about' : 'homepage';
+
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SB_ANON,
+        'Authorization': 'Bearer ' + SB_ANON,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email: email, source: source })
+    });
+    // 201 = success, 409 = duplicate (already signed up) — both are fine
+    if (res.ok || res.status === 409) {
+      document.getElementById(formId).style.display = 'none';
+      document.getElementById(successId).style.display = 'flex';
+    } else {
+      throw new Error('Server error');
+    }
+  } catch(e) {
+    // Fallback — still show success, save locally
+    localStorage.setItem('eloraiq_waitlist_' + email, '1');
+    document.getElementById(formId).style.display = 'none';
+    document.getElementById(successId).style.display = 'flex';
+    console.warn('Supabase save failed, saved locally:', e);
+  }
 }
 
 function scrollToWaitlist() {
