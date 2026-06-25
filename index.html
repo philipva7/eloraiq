@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elora IQ — Intelligence in every assessment</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bl50:#E6F1FB;--bl100:#B5D4F4;--bl200:#74B9FF;--bl400:#0984E3;--bl600:#0770C4;--bl800:#0A4F8A;--bl900:#052C4E;
+  --am50:#FFF8E6;--am200:#FDCB6E;--am400:#F0A500;--am600:#C17D00;
+  --co400:#E17055;--co600:#C25A42;
+  --sl50:#F8F9FA;--sl100:#F1F3F5;--sl200:#E9ECEF;--sl300:#DEE2E6;--sl400:#ADB5BD;--sl600:#636E72;--sl700:#495057;--sl800:#2D3436;--sl900:#1a1a2e;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --rmd:8px;--rlg:12px;--rxl:16px;--r2xl:24px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--sl800);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--sl200);border-radius:4px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);
+  border-bottom:0.5px solid var(--sl200);
+  height:62px;display:flex;align-items:center;
+  padding:0 32px;gap:0;
+}
+.nav-logo{display:flex;align-items:center;gap:9px;flex-shrink:0;margin-right:auto}
+.nav-logo-text{font-size:18px;font-weight:500;letter-spacing:1.5px;color:var(--bl400)}
+.nav-logo-iq{font-size:18px;font-weight:800;color:var(--am200);letter-spacing:-.3px}
+.nav-links{display:flex;align-items:center;gap:6px;margin-right:16px}
+.nl{font-size:13px;color:var(--sl600);padding:6px 12px;border-radius:var(--rmd);transition:background .12s,color .12s;white-space:nowrap}
+.nl:hover{background:var(--sl50);color:var(--sl800)}
+.nl.active{color:var(--bl400);font-weight:500}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:var(--rmd);font-size:13px;font-family:var(--font);font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;text-decoration:none}
+.btn-p{background:var(--bl400);color:#fff}
+.btn-p:hover{background:var(--bl600)}
+.btn-o{background:transparent;border:1px solid var(--sl200);color:var(--sl800)}
+.btn-o:hover{background:var(--sl50)}
+.btn-am{background:var(--am200);color:var(--sl900)}
+.btn-am:hover{background:var(--am400)}
+.btn-lg{padding:13px 28px;font-size:15px;border-radius:var(--rlg)}
+
+/* ── SECTIONS ── */
+.pad{padding:88px 40px}
+.padv{padding:80px 40px}
+.wrap{max-width:1100px;margin:0 auto}
+.wrap-sm{max-width:720px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--bl50);color:var(--bl600);border:0.5px solid var(--bl100);border-radius:20px;padding:4px 13px;font-size:12px;font-weight:500;margin-bottom:18px}
+.eyebrow i{font-size:14px}
+.sec-title{font-size:clamp(26px,3.5vw,42px);font-weight:700;letter-spacing:-1px;color:var(--sl900);line-height:1.18;margin-bottom:14px}
+.sec-sub{font-size:17px;color:var(--sl600);line-height:1.75}
+.center{text-align:center}
+.center .sec-sub{max-width:580px;margin:0 auto}
+
+/* ── HERO ── */
+.hero{padding:130px 40px 96px;background:linear-gradient(180deg,var(--sl50) 0%,#fff 100%);text-align:center}
+.hero h1{font-size:clamp(38px,5.5vw,68px);font-weight:700;line-height:1.1;letter-spacing:-2px;color:var(--sl900);max-width:840px;margin:0 auto 18px}
+.hero h1 span{color:var(--bl400)}
+.hero-sub{font-size:clamp(16px,2vw,19px);color:var(--sl600);max-width:540px;margin:0 auto 36px;line-height:1.72}
+.hero-note{font-size:12px;color:var(--sl400);margin-top:14px}
+
+/* Waitlist form */
+.wl-form{display:flex;gap:10px;max-width:460px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.wl-inp{flex:1;min-width:210px;padding:12px 16px;border:1px solid var(--sl200);border-radius:var(--rlg);font-size:14px;font-family:var(--font);outline:none;color:var(--sl800);background:#fff;transition:border-color .15s}
+.wl-inp:focus{border-color:var(--bl400)}
+.wl-inp::placeholder{color:var(--sl400)}
+.wl-success{display:none;align-items:center;gap:9px;background:var(--bl50);border:0.5px solid var(--bl100);border-radius:var(--rlg);padding:11px 18px;font-size:13px;color:var(--bl600);max-width:460px;margin:0 auto}
+.wl-success i{font-size:18px;flex-shrink:0}
+
+/* App preview */
+.hero-preview{margin:56px auto 0;max-width:880px;background:var(--sl900);border-radius:var(--r2xl);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.18)}
+.preview-bar{background:rgba(255,255,255,0.06);padding:11px 16px;display:flex;align-items:center;gap:7px;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+.dot{width:10px;height:10px;border-radius:50%}
+.dr{background:#FF5F57}.dy{background:#FFBD2E}.dg{background:#28C840}
+.preview-url{margin-left:8px;font-size:11px;color:rgba(255,255,255,0.25)}
+.preview-grid{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pc{background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.09);border-radius:var(--rlg);padding:14px}
+.pc-lbl{font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px}
+.pc-q{font-size:12px;color:rgba(255,255,255,0.65);padding:7px 9px;background:rgba(255,255,255,0.05);border-radius:5px;border-left:2px solid var(--bl400);margin-bottom:6px}
+.pc-chip{display:inline-flex;font-size:11px;padding:4px 10px;border-radius:5px;margin-right:5px}
+.pc-chip.active{background:rgba(9,132,227,0.3);color:#fff}
+.pc-chip.off{border:0.5px solid rgba(9,132,227,0.35);color:#74B9FF}
+.pc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.pc-label{font-size:11px;color:rgba(255,255,255,0.45)}
+.pc-val{font-size:11px;font-weight:500;color:rgba(255,255,255,0.8)}
+.pc-bar{height:4px;border-radius:2px;background:rgba(255,255,255,0.07);margin-bottom:8px}
+.pc-fill{height:100%;border-radius:2px}
+.pill-g{background:rgba(0,184,148,0.2);color:#00B894;font-size:11px;padding:2px 7px;border-radius:6px;font-weight:500}
+.pill-a{background:rgba(253,203,110,0.2);color:#FDCB6E;font-size:11px;padding:2px 7px;border-radius:6px;font-weight:500}
+.pc-stat{font-size:20px;font-weight:600;color:rgba(255,255,255,0.92)}
+.pc-stat-lbl{font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px}
+.pc-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pc-mini{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.07);border-radius:7px;padding:9px}
+
+/* ── STATS ── */
+.stats-strip{background:#fff;border-top:0.5px solid var(--sl200);border-bottom:0.5px solid var(--sl200);padding:36px 40px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:860px;margin:0 auto;text-align:center}
+.stat-val{font-size:34px;font-weight:700;color:var(--sl900);letter-spacing:-1px;line-height:1}
+.stat-val span{color:var(--bl400)}
+.stat-lbl{font-size:13px;color:var(--sl500,#6c757d);margin-top:5px}
+
+/* ── HOW IT WORKS ── */
+.how-bg{background:#fff}
+.how-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.how-card{background:var(--sl50);border:0.5px solid var(--sl200);border-radius:var(--rxl);padding:26px}
+.how-num{font-size:11px;font-weight:700;color:var(--bl400);letter-spacing:.7px;text-transform:uppercase;margin-bottom:12px}
+.how-icon{width:42px;height:42px;background:var(--bl50);border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.how-icon i{font-size:20px;color:var(--bl400)}
+.how-title{font-size:16px;font-weight:600;color:var(--sl900);margin-bottom:7px}
+.how-desc{font-size:14px;color:var(--sl600);line-height:1.7}
+
+/* ── USE CASES ── */
+.uc-bg{background:var(--sl50)}
+.uc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.uc-card{background:#fff;border:0.5px solid var(--sl200);border-radius:var(--rxl);padding:26px;transition:border-color .15s,box-shadow .15s}
+.uc-card:hover{border-color:var(--bl200);box-shadow:0 6px 24px rgba(9,132,227,0.07)}
+.uc-icon{width:46px;height:46px;border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.uc-icon i{font-size:22px}
+.uc-icon.bl{background:var(--bl50)}.uc-icon.bl i{color:var(--bl400)}
+.uc-icon.am{background:var(--am50)}.uc-icon.am i{color:var(--am400)}
+.uc-icon.tl{background:#E0FAF5}.uc-icon.tl i{color:#00B894}
+.uc-icon.co{background:#FFF0EE}.uc-icon.co i{color:var(--co400)}
+.uc-title{font-size:16px;font-weight:600;color:var(--sl900);margin-bottom:7px}
+.uc-desc{font-size:14px;color:var(--sl600);line-height:1.7}
+
+/* ── FEATURES ── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.feat-card{background:#fff;border:0.5px solid var(--sl200);border-radius:var(--rxl);padding:26px;transition:border-color .15s,box-shadow .15s}
+.feat-card:hover{border-color:var(--bl200);box-shadow:0 6px 24px rgba(9,132,227,0.07)}
+.feat-icon{width:46px;height:46px;border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.feat-icon i{font-size:22px}
+.feat-icon.bl{background:var(--bl50)}.feat-icon.bl i{color:var(--bl400)}
+.feat-icon.am{background:var(--am50)}.feat-icon.am i{color:var(--am400)}
+.feat-icon.co{background:#FFF0EE}.feat-icon.co i{color:var(--co400)}
+.feat-icon.tl{background:#E0FAF5}.feat-icon.tl i{color:#00B894}
+.feat-icon.vi{background:#F0EEFF}.feat-icon.vi i{color:#6C5CE7}
+.feat-icon.gr{background:#EDFBF1}.feat-icon.gr i{color:#00A550}
+.feat-title{font-size:15px;font-weight:600;color:var(--sl900);margin-bottom:7px}
+.feat-desc{font-size:14px;color:var(--sl600);line-height:1.7}
+
+/* ── VIDEO ── */
+.video-bg{background:var(--sl900);padding:88px 40px;text-align:center}
+.video-wrap{max-width:780px;margin:44px auto 0;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--r2xl);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer}
+.video-inner-bg{position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(9,132,227,0.14),transparent 60%),radial-gradient(circle at 30% 70%,rgba(253,203,110,0.07),transparent 50%)}
+.play-btn{width:76px;height:76px;background:rgba(255,255,255,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,0.2);position:relative;z-index:1;transition:background .15s}
+.play-btn:hover{background:rgba(255,255,255,0.22)}
+.play-btn i{font-size:30px;color:white;margin-left:4px}
+.video-cap{margin-top:14px;font-size:12px;color:rgba(255,255,255,0.3)}
+
+/* ── PRICING ── */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px;max-width:980px;margin-left:auto;margin-right:auto}
+.plan{background:#fff;border:1px solid var(--sl200);border-radius:var(--rxl);padding:30px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.plan:hover{border-color:var(--bl200);box-shadow:0 8px 32px rgba(9,132,227,0.08)}
+.plan.featured{border-color:var(--bl400);box-shadow:0 0 0 1px var(--bl400),0 16px 48px rgba(9,132,227,0.12)}
+.plan-badge{display:inline-block;background:var(--bl400);color:#fff;font-size:11px;font-weight:600;letter-spacing:.4px;padding:3px 10px;border-radius:20px;margin-bottom:14px;width:fit-content}
+.plan-name{font-size:19px;font-weight:700;color:var(--sl900);margin-bottom:5px}
+.plan-desc{font-size:13px;color:var(--sl600);margin-bottom:18px;line-height:1.6}
+.plan-price{margin-bottom:22px}
+.plan-amt{font-size:38px;font-weight:700;color:var(--sl900);letter-spacing:-1px}
+.plan-per{font-size:14px;color:var(--sl400);margin-left:2px}
+.plan-free-txt{font-size:26px;font-weight:700;color:var(--sl900)}
+.plan-div{height:0.5px;background:var(--sl200);margin-bottom:18px}
+.plan-feats{flex:1;display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+.pf{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--sl700)}
+.pf i{font-size:15px;color:var(--bl400);flex-shrink:0;margin-top:1px}
+.pf.off i{color:var(--sl300)}
+.pf.off span{color:var(--sl400)}
+.plan-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;border-radius:var(--rmd);font-size:13px;font-weight:500;font-family:var(--font);cursor:pointer;border:none;transition:all .15s;text-decoration:none}
+.plan-btn.primary{background:var(--bl400);color:#fff}
+.plan-btn.primary:hover{background:var(--bl600)}
+.plan-btn.outline{background:transparent;border:1px solid var(--sl200);color:var(--sl800)}
+.plan-btn.outline:hover{background:var(--sl50)}
+
+/* ── TESTIMONIALS ── */
+.proof-bg{background:var(--bl50)}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;max-width:980px;margin-left:auto;margin-right:auto}
+.proof-card{background:#fff;border:0.5px solid var(--bl100);border-radius:var(--rxl);padding:26px}
+.proof-stars{display:flex;gap:3px;margin-bottom:12px}
+.proof-stars i{font-size:15px;color:var(--am400)}
+.proof-quote{font-size:14px;color:var(--sl700);line-height:1.75;margin-bottom:16px;font-style:italic}
+.proof-author{display:flex;align-items:center;gap:10px}
+.proof-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
+.proof-name{font-size:13px;font-weight:600;color:var(--sl800)}
+.proof-role{font-size:11px;color:var(--sl400)}
+
+/* ── CTA ── */
+.cta-bg{background:var(--sl900);padding:88px 40px;text-align:center}
+.cta-bg .sec-title{color:#fff}
+.cta-bg .sec-sub{color:rgba(255,255,255,0.55);max-width:520px;margin:0 auto 36px}
+.cta-note{font-size:12px;color:rgba(255,255,255,0.25);margin-top:14px}
+.cta-bg .wl-inp{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.12);color:#fff}
+.cta-bg .wl-inp::placeholder{color:rgba(255,255,255,0.3)}
+.cta-bg .wl-inp:focus{border-color:var(--bl200)}
+.cta-bg .wl-success{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.12);color:var(--bl200)}
+
+/* ── FOOTER ── */
+footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,0.06);padding:48px 40px 32px}
+.footer-top{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:40px}
+.footer-brand{max-width:240px}
+.footer-brand-desc{font-size:13px;color:rgba(255,255,255,0.35);margin-top:12px;line-height:1.7}
+.footer-cols{display:flex;gap:48px;flex-wrap:wrap}
+.footer-col-title{font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:13px}
+.footer-links{display:flex;flex-direction:column;gap:9px}
+.footer-link{font-size:13px;color:rgba(255,255,255,0.45);transition:color .15s}
+.footer-link:hover{color:rgba(255,255,255,0.85)}
+.footer-bottom{max-width:1100px;margin:0 auto;padding-top:24px;border-top:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:12px;color:rgba(255,255,255,0.2)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{font-size:12px;color:rgba(255,255,255,0.2);transition:color .15s}
+.footer-legal a:hover{color:rgba(255,255,255,0.6)}
+
+/* ── LOGO SVG ── */
+.logo-svg{flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg class="logo-svg" width="30" height="30" viewBox="0 0 56 56" fill="none">
+      <rect width="56" height="56" rx="12" fill="#0984E3"/>
+      <rect x="12" y="15" width="22" height="5" rx="2.5" fill="white"/>
+      <rect x="12" y="25.5" width="17" height="5" rx="2.5" fill="white"/>
+      <rect x="12" y="36" width="22" height="5" rx="2.5" fill="white"/>
+      <rect x="12" y="15" width="5" height="26" rx="2.5" fill="white"/>
+      <circle cx="7" cy="7" r="2.5" fill="white" opacity=".25"/>
+      <circle cx="49" cy="7" r="2.5" fill="#FDCB6E" opacity=".7"/>
+      <circle cx="7" cy="49" r="2.5" fill="white" opacity=".18"/>
+      <circle cx="46" cy="17" r="3.5" fill="#FDCB6E"/>
+      <circle cx="50" cy="29" r="2.5" fill="#74B9FF"/>
+      <circle cx="45" cy="42" r="3" fill="#FDCB6E" opacity=".85"/>
+      <line x1="46" y1="20.5" x2="50" y2="26.5" stroke="#FDCB6E" stroke-width="1.1" opacity=".5"/>
+      <line x1="50" y1="31.5" x2="45" y2="39" stroke="#74B9FF" stroke-width="1.1" opacity=".4"/>
+    </svg>
+    <span class="nav-logo-text">elora</span><span class="nav-logo-iq"> IQ</span>
+  </a>
+  <div class="nav-links">
+    <a href="#how" class="nl">How it works</a>
+    <a href="#usecases" class="nl">Use cases</a>
+    <a href="#features" class="nl">Features</a>
+    <a href="#pricing" class="nl">Pricing</a>
+    <a href="about.html" class="nl">About</a>
+  </div>
+  <a href="#waitlist" class="btn btn-p">Join waitlist <i class="ti ti-arrow-right"></i></a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="eyebrow"><i class="ti ti-sparkles"></i> Early access now open</div>
+  <h1>Assess smarter.<br><span>Every time.</span></h1>
+  <p class="hero-sub">From hiring the right talent to promoting the right people — Elora IQ helps organisations create, run, and mark intelligent assessments for any purpose.</p>
+
+  <div id="waitlist">
+    <div class="wl-form" id="heroForm">
+      <input class="wl-inp" type="email" id="heroEmail" placeholder="Enter your work email"/>
+      <button class="btn btn-p btn-lg" onclick="joinWaitlist('heroEmail','heroSuccess','heroForm')">
+        Get early access <i class="ti ti-arrow-right"></i>
+      </button>
+    </div>
+    <div class="wl-success" id="heroSuccess">
+      <i class="ti ti-circle-check"></i>
+      You're on the list! We'll be in touch when Elora IQ is ready for you.
+    </div>
+  </div>
+  <div class="hero-note"><i class="ti ti-lock" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>No credit card required · Free plan available · Launches Q3 2026</div>
+
+  <!-- App preview -->
+  <div class="hero-preview">
+    <div class="preview-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <span class="preview-url">eloraiq.com/app</span>
+    </div>
+    <div class="preview-grid">
+      <div class="pc">
+        <div class="pc-lbl">AI assessment creator</div>
+        <div class="pc-q">What role or purpose is this assessment for?</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);padding:7px 9px;background:rgba(9,132,227,.2);border-radius:5px;margin-bottom:8px">Senior DevOps Engineer — hiring</div>
+        <div class="pc-q">How many MCQ questions? (~1.5 min each)</div>
+        <div style="margin-top:6px">
+          <span class="pc-chip off">10</span><span class="pc-chip active">15</span><span class="pc-chip off">20</span><span class="pc-chip off">25</span>
+        </div>
+      </div>
+      <div class="pc">
+        <div class="pc-lbl">Candidate integrity report</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="font-size:13px;color:rgba(255,255,255,.7)">Rahul Kumar</span>
+          <span class="pill-g">83%</span>
+        </div>
+        <div class="pc-row"><span class="pc-label">Tab switches</span><span class="pc-val" style="color:#FDCB6E">2 times</span></div>
+        <div class="pc-bar"><div class="pc-fill" style="width:18%;background:#FDCB6E"></div></div>
+        <div class="pc-row"><span class="pc-label">AI usage</span><span class="pc-val" style="color:#00B894">Low 8%</span></div>
+        <div class="pc-bar"><div class="pc-fill" style="width:8%;background:#00B894"></div></div>
+        <div class="pc-row"><span class="pc-label">Plagiarism</span><span class="pc-val" style="color:#00B894">4%</span></div>
+        <div class="pc-bar" style="margin-bottom:0"><div class="pc-fill" style="width:4%;background:#00B894"></div></div>
+      </div>
+      <div class="pc">
+        <div class="pc-lbl">Dashboard</div>
+        <div class="pc-mini-grid">
+          <div class="pc-mini"><div class="pc-stat">14</div><div class="pc-stat-lbl">Assessments</div></div>
+          <div class="pc-mini"><div class="pc-stat">247</div><div class="pc-stat-lbl">Candidates</div></div>
+          <div class="pc-mini"><div class="pc-stat" style="color:#00B894">87%</div><div class="pc-stat-lbl">Avg integrity</div></div>
+          <div class="pc-mini"><div class="pc-stat">89</div><div class="pc-stat-lbl">Reports sent</div></div>
+        </div>
+      </div>
+      <div class="pc">
+        <div class="pc-lbl">Assessment link</div>
+        <div style="font-size:11px;font-family:monospace;color:#74B9FF;background:rgba(9,132,227,.1);padding:6px 9px;border-radius:5px;margin-bottom:9px">eloraiq.com/t/devops-X92kA</div>
+        <div class="pc-q" style="border-left-color:#FDCB6E">Proctoring active — 6 signals monitored</div>
+        <div style="margin-top:8px;display:flex;gap:6px">
+          <span class="pill-g">● Live</span>
+          <span class="pill-a">48 accessed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<div class="stats-strip">
+  <div class="stats-grid">
+    <div><div class="stat-val">5<span>min</span></div><div class="stat-lbl">To create a full assessment</div></div>
+    <div><div class="stat-val"><span>6</span>×</div><div class="stat-lbl">Faster than manual creation</div></div>
+    <div><div class="stat-val">98<span>%</span></div><div class="stat-lbl">AI marking accuracy</div></div>
+    <div><div class="stat-val"><span>∞</span></div><div class="stat-lbl">Use cases — hiring, promotions, certification</div></div>
+  </div>
+</div>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="padv how-bg" id="how">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow"><i class="ti ti-list-check"></i> How it works</div>
+      <h2 class="sec-title">From brief to results in four steps</h2>
+      <p class="sec-sub">Whether you're evaluating candidates, assessing skills for a promotion, or running internal certification — Elora IQ handles the entire workflow from creation to final report.</p>
+    </div>
+    <div class="how-grid" style="margin-top:48px">
+      <div class="how-card">
+        <div class="how-num">Step 01</div>
+        <div class="how-icon"><i class="ti ti-sparkles"></i></div>
+        <div class="how-title">Describe your assessment</div>
+        <div class="how-desc">Chat with Elora IQ's AI builder. Tell it the purpose — a hiring test, a promotion review, a skills certification — and it creates a complete, tailored assessment in seconds.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">Step 02</div>
+        <div class="how-icon"><i class="ti ti-link"></i></div>
+        <div class="how-title">Share the link</div>
+        <div class="how-desc">Publish and share a public or private link. Invite individuals by email directly from the platform — each gets a unique access link tied to their identity.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">Step 03</div>
+        <div class="how-icon"><i class="ti ti-shield-check"></i></div>
+        <div class="how-title">Monitor in real time</div>
+        <div class="how-desc">While the assessment is in progress, Elora IQ monitors for tab switching, copy-paste, AI usage, and plagiarism — alerting participants and logging every integrity event.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">Step 04</div>
+        <div class="how-icon"><i class="ti ti-mail-check"></i></div>
+        <div class="how-title">Receive the report</div>
+        <div class="how-desc">The moment someone submits, AI marks every answer and emails you a full report — scores, integrity analysis, and a marking breakdown per question. Participants see nothing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ USE CASES ══ -->
+<section class="padv uc-bg" id="usecases">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow"><i class="ti ti-apps"></i> Use cases</div>
+      <h2 class="sec-title">Built for every kind of assessment</h2>
+      <p class="sec-sub">Elora IQ goes beyond hiring. Any organisation that needs to assess people — fairly, efficiently, and at scale — will find a home here.</p>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card">
+        <div class="uc-icon bl"><i class="ti ti-users"></i></div>
+        <div class="uc-title">Talent acquisition</div>
+        <div class="uc-desc">Screen and assess candidates before interviews. Build role-specific tests in minutes, share a link, and receive AI-marked reports the moment each candidate submits — no manual marking needed.</div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon am"><i class="ti ti-arrow-up-circle"></i></div>
+        <div class="uc-title">Internal promotions</div>
+        <div class="uc-desc">Make promotion decisions on evidence, not opinion. Assess whether someone is ready for a senior role with a structured, consistent test — the same rigour you'd apply to an external hire.</div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon tl"><i class="ti ti-certificate"></i></div>
+        <div class="uc-title">Skills certification</div>
+        <div class="uc-desc">Run periodic skill assessments across teams. Certify that your engineers, analysts, or support staff meet the standards their roles require — with automated, consistent AI marking at any scale.</div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon co"><i class="ti ti-shield-lock"></i></div>
+        <div class="uc-title">Compliance testing</div>
+        <div class="uc-desc">Certify that staff have understood and can apply compliance requirements. Run assessments across entire departments and receive instant reports — no manual review, no spreadsheets.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ══ -->
+<section class="padv" id="features">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow"><i class="ti ti-star"></i> Features</div>
+      <h2 class="sec-title">Everything you need to assess smarter</h2>
+      <p class="sec-sub">From AI-powered creation to live proctoring and instant results — every feature is designed to make assessments faster, fairer, and more reliable.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon bl"><i class="ti ti-message-chatbot"></i></div>
+        <div class="feat-title">Conversational AI creator</div>
+        <div class="feat-desc">Describe what you need in plain English. Elora IQ asks one question at a time and builds the full assessment — MCQ, descriptive, coding challenges, and soft skills.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon am"><i class="ti ti-clock"></i></div>
+        <div class="feat-title">Smart time budgeting</div>
+        <div class="feat-desc">As you add questions, the AI tracks your time budget in real time and alerts you if selections exceed the limit — with instant adjustment options.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon co"><i class="ti ti-eye"></i></div>
+        <div class="feat-title">Live proctoring</div>
+        <div class="feat-desc">Six integrity signals monitored simultaneously — tab switches, copy-paste attempts, AI usage detection, time off-tab, plagiarism, and real-time candidate alerts.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon tl"><i class="ti ti-robot"></i></div>
+        <div class="feat-title">AI marking engine</div>
+        <div class="feat-desc">MCQ marked instantly. Descriptive and coding answers scored by AI against the rubric generated during creation. Custom questions flagged as Suggestive marks.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon vi"><i class="ti ti-mail-check"></i></div>
+        <div class="feat-title">Automated reports</div>
+        <div class="feat-desc">The moment someone submits, you receive a full report by email — scores, integrity percentage, event timeline, and AI marking breakdown per question.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon gr"><i class="ti ti-lock"></i></div>
+        <div class="feat-title">Private invite links</div>
+        <div class="feat-desc">Send personalised assessment links to specific people by email. Each person gets a unique URL — no shared access, no results leaked through forwarded links.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VIDEO ══ -->
+<div class="video-bg">
+  <div class="wrap-sm">
+    <div class="center">
+      <div class="eyebrow" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.6)"><i class="ti ti-player-play"></i> See it in action</div>
+      <h2 class="sec-title" style="color:#fff">Watch Elora IQ build a full assessment in under 3 minutes</h2>
+      <p class="sec-sub" style="color:rgba(255,255,255,.5)">From role description to published assessment — see the full AI-powered workflow live.</p>
+    </div>
+    <div class="video-wrap">
+      <div class="video-inner-bg"></div>
+      <div class="play-btn"><i class="ti ti-player-play"></i></div>
+    </div>
+    <div class="video-cap">Demo video coming soon · Sign up to be notified</div>
+  </div>
+</div>
+
+<!-- ══ PRICING ══ -->
+<section class="padv" id="pricing">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow"><i class="ti ti-receipt"></i> Pricing</div>
+      <h2 class="sec-title">Simple, transparent pricing</h2>
+      <p class="sec-sub">Start free, scale as you grow. Whether you're a startup hiring your first engineer or an enterprise running internal assessments at scale.</p>
+    </div>
+    <div class="price-grid">
+
+      <!-- Free -->
+      <div class="plan" onclick="scrollToWaitlist()">
+        <div class="plan-name">Free</div>
+        <div class="plan-desc">For individuals and small teams exploring what Elora IQ can do.</div>
+        <div class="plan-price"><span class="plan-free-txt">$0</span><span style="font-size:13px;color:var(--sl400);display:block;margin-top:2px">forever</span></div>
+        <div class="plan-div"></div>
+        <div class="plan-feats">
+          <div class="pf"><i class="ti ti-check"></i><span>2 assessments per month</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Up to 10 participants</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>MCQ + descriptive questions</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Basic proctoring</span></div>
+          <div class="pf off"><i class="ti ti-x"></i><span>AI marking</span></div>
+          <div class="pf off"><i class="ti ti-x"></i><span>Email reports</span></div>
+          <div class="pf off"><i class="ti ti-x"></i><span>Private invite links</span></div>
+        </div>
+        <div class="plan-btn outline"><i class="ti ti-clock-hour-4"></i> Join waitlist</div>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan featured" onclick="scrollToWaitlist()">
+        <div class="plan-badge">Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-desc">For teams running regular hiring, promotion, or skills assessments.</div>
+        <div class="plan-price"><span class="plan-amt">$49</span><span class="plan-per">/month</span></div>
+        <div class="plan-div"></div>
+        <div class="plan-feats">
+          <div class="pf"><i class="ti ti-check"></i><span>Unlimited assessments</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Up to 100 participants/month</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>All question types incl. coding</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Full proctoring — 6 signals</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>AI marking on all answers</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Automated email reports</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Private invite links</span></div>
+        </div>
+        <div class="plan-btn primary"><i class="ti ti-clock-hour-4"></i> Join waitlist</div>
+      </div>
+
+      <!-- Business -->
+      <div class="plan" onclick="scrollToWaitlist()">
+        <div class="plan-name">Business</div>
+        <div class="plan-desc">For enterprises running assessments at scale across departments.</div>
+        <div class="plan-price"><span class="plan-amt">$149</span><span class="plan-per">/month</span></div>
+        <div class="plan-div"></div>
+        <div class="plan-feats">
+          <div class="pf"><i class="ti ti-check"></i><span>Everything in Pro</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Unlimited participants</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Google + Microsoft SSO</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Custom branding on test pages</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Team management + roles</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Priority support</span></div>
+          <div class="pf"><i class="ti ti-check"></i><span>Dedicated onboarding</span></div>
+        </div>
+        <div class="plan-btn outline"><i class="ti ti-clock-hour-4"></i> Join waitlist</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="padv proof-bg">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow"><i class="ti ti-quote"></i> Early feedback</div>
+      <h2 class="sec-title">What teams are saying</h2>
+    </div>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+        <div class="proof-quote">"We use Elora IQ for both hiring and internal promotions. It took 4 minutes to build a Senior Engineer promotion assessment that would have taken half a day manually."</div>
+        <div class="proof-author">
+          <div class="proof-av" style="background:var(--bl400)">SK</div>
+          <div><div class="proof-name">Sneha Krishnan</div><div class="proof-role">Head of Engineering, Fintech company</div></div>
+        </div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+        <div class="proof-quote">"We now run quarterly skills assessments for all engineering staff. The AI marking is accurate enough that our managers trust the results without reviewing every answer."</div>
+        <div class="proof-author">
+          <div class="proof-av" style="background:var(--co400)">AR</div>
+          <div><div class="proof-name">Arun Raj</div><div class="proof-role">Talent Lead, SaaS company</div></div>
+        </div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+        <div class="proof-quote">"We use it for compliance certification across 3 departments. Automated reports mean our compliance team gets results instantly — no manual marking, no spreadsheets."</div>
+        <div class="proof-author">
+          <div class="proof-av" style="background:#00B894">PM</div>
+          <div><div class="proof-name">Priya Menon</div><div class="proof-role">Compliance Manager, Financial services</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA / WAITLIST ══ -->
+<section class="cta-bg" id="waitlist-bottom">
+  <div class="wrap-sm center">
+    <div class="eyebrow" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.55)"><i class="ti ti-rocket"></i> Get early access</div>
+    <h2 class="sec-title">Start assessing smarter</h2>
+    <p class="sec-sub">Join the waitlist and get 3 months of Pro free when we launch in Q3 2026. Whether you're hiring, promoting, or certifying — Elora IQ is built for you.</p>
+    <div class="wl-form" id="ctaForm">
+      <input class="wl-inp" type="email" id="ctaEmail" placeholder="Enter your work email"/>
+      <button class="btn btn-am btn-lg" onclick="joinWaitlist('ctaEmail','ctaSuccess','ctaForm')">
+        Join the waitlist <i class="ti ti-arrow-right"></i>
+      </button>
+    </div>
+    <div class="wl-success" id="ctaSuccess">
+      <i class="ti ti-circle-check"></i>
+      You're on the list! We'll reach out with early access and your 3-month Pro offer.
+    </div>
+    <div class="cta-note"><i class="ti ti-lock" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i>No credit card · Unsubscribe anytime · Your email is never shared</div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="margin-bottom:0">
+        <svg width="26" height="26" viewBox="0 0 56 56" fill="none">
+          <rect width="56" height="56" rx="12" fill="#0984E3"/>
+          <rect x="12" y="15" width="22" height="5" rx="2.5" fill="white"/>
+          <rect x="12" y="25.5" width="17" height="5" rx="2.5" fill="white"/>
+          <rect x="12" y="36" width="22" height="5" rx="2.5" fill="white"/>
+          <rect x="12" y="15" width="5" height="26" rx="2.5" fill="white"/>
+          <circle cx="49" cy="7" r="2.5" fill="#FDCB6E" opacity=".7"/>
+          <circle cx="46" cy="17" r="3.5" fill="#FDCB6E"/>
+          <circle cx="50" cy="29" r="2.5" fill="#74B9FF"/>
+          <circle cx="45" cy="42" r="3" fill="#FDCB6E" opacity=".85"/>
+        </svg>
+        <span style="font-size:16px;font-weight:500;letter-spacing:1.5px;color:#74B9FF">elora</span><span style="font-size:16px;font-weight:800;color:#FDCB6E"> IQ</span>
+      </a>
+      <p class="footer-brand-desc">Intelligence in every assessment. AI-powered assessments for hiring, internal promotions, skills certification, and more.</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <div class="footer-col-title">Product</div>
+        <div class="footer-links">
+          <a href="#how" class="footer-link">How it works</a>
+          <a href="#usecases" class="footer-link">Use cases</a>
+          <a href="#features" class="footer-link">Features</a>
+          <a href="#pricing" class="footer-link">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="about.html" class="footer-link">About</a>
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Careers</a>
+          <a href="mailto:hello@eloraiq.com" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy policy</a>
+          <a href="#" class="footer-link">Terms of service</a>
+          <a href="#" class="footer-link">Cookie policy</a>
+          <a href="#" class="footer-link">Security</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Elora IQ. All rights reserved.</div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function joinWaitlist(inputId, successId, formId) {
+  const input = document.getElementById(inputId);
+  const email = (input.value || '').trim();
+  if (!email || !email.includes('@')) {
+    input.style.borderColor = '#E17055';
+    input.placeholder = 'Please enter a valid email';
+    setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'Enter your work email'; }, 2500);
+    return;
+  }
+  const emails = JSON.parse(localStorage.getItem('eloraiq_waitlist') || '[]');
+  if (!emails.includes(email)) { emails.push(email); localStorage.setItem('eloraiq_waitlist', JSON.stringify(emails)); }
+  document.getElementById(formId).style.display = 'none';
+  document.getElementById(successId).style.display = 'flex';
+}
+
+function scrollToWaitlist() {
+  document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.boxShadow = window.scrollY > 8 ? '0 1px 20px rgba(0,0,0,0.06)' : 'none';
+});
+
+document.getElementById('heroEmail').addEventListener('keydown', e => { if (e.key === 'Enter') joinWaitlist('heroEmail','heroSuccess','heroForm'); });
+document.getElementById('ctaEmail').addEventListener('keydown', e => { if (e.key === 'Enter') joinWaitlist('ctaEmail','ctaSuccess','ctaForm'); });
+</script>
+</body>
+</html>
