@@ -386,6 +386,49 @@ footer{background:var(--slate-900);padding:40px;margin-top:0}
 
 const SB_URL = 'https://jbtwxuxrxuldivtidqcs.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidHd4dXhyeHVsZGl2dGlkcWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTU5NTAsImV4cCI6MjA5Nzg3MTk1MH0.2DikBCmMqomg8v3Fb9sI87ka9_c17qSF96nn0bSCKA0';
+const RESEND_KEY = 're_K8kQaLxv_PfQ3558n3RX5F7zdJHEsEpme';
+
+async function sendNotification(email, source) {
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + RESEND_KEY
+      },
+      body: JSON.stringify({
+        from: 'Elora IQ <hello@eloraiq.com>',
+        to: ['philip@eloraiq.com'],
+        subject: '🎉 New waitlist signup — ' + email,
+        html: `
+          <div style="font-family:-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:32px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+              <div style="width:36px;height:36px;background:#0984E3;border-radius:8px;display:flex;align-items:center;justify-content:center">
+                <span style="color:#FDCB6E;font-weight:800;font-size:14px">IQ</span>
+              </div>
+              <span style="font-size:18px;font-weight:500;color:#0984E3">elora <strong style="color:#FDCB6E">IQ</strong></span>
+            </div>
+            <h2 style="font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:8px">New waitlist signup</h2>
+            <p style="font-size:15px;color:#636E72;margin-bottom:20px">Someone just joined the Elora IQ waitlist.</p>
+            <div style="background:#F8F9FA;border-radius:10px;padding:16px 20px;margin-bottom:20px">
+              <div style="font-size:12px;color:#ADB5BD;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Email address</div>
+              <div style="font-size:16px;font-weight:600;color:#1a1a2e">${email}</div>
+            </div>
+            <div style="background:#F8F9FA;border-radius:10px;padding:16px 20px;margin-bottom:24px">
+              <div style="font-size:12px;color:#ADB5BD;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Signed up from</div>
+              <div style="font-size:16px;font-weight:600;color:#1a1a2e">About page</div>
+            </div>
+            <div style="font-size:13px;color:#ADB5BD;border-top:0.5px solid #E9ECEF;padding-top:16px">
+              View all signups in your <a href="https://supabase.com" style="color:#0984E3">Supabase dashboard</a> → waitlist table.
+            </div>
+          </div>
+        `
+      })
+    });
+  } catch(e) {
+    console.warn('Resend notification failed:', e);
+  }
+}
 
 async function joinWaitlist() {
   const input = document.getElementById('aboutEmail');
@@ -407,6 +450,7 @@ async function joinWaitlist() {
       body: JSON.stringify({ email: email, source: 'about' })
     });
     if (res.ok || res.status === 409) {
+      await sendNotification(email, 'about');
       document.getElementById('aboutWaitlistForm').style.display = 'none';
       document.getElementById('aboutSuccess').style.display = 'flex';
     } else { throw new Error(); }
