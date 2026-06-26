@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal — Elora IQ</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='56' height='56' viewBox='0 0 56 56' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='56' height='56' rx='12' fill='%230984E3'/%3E%3Crect x='12' y='15' width='22' height='5' rx='2.5' fill='white'/%3E%3Crect x='12' y='25.5' width='17' height='5' rx='2.5' fill='white'/%3E%3Crect x='12' y='36' width='22' height='5' rx='2.5' fill='white'/%3E%3Crect x='12' y='15' width='5' height='26' rx='2.5' fill='white'/%3E%3Ccircle cx='49' cy='7' r='3' fill='%23FDCB6E'/%3E%3Ccircle cx='46' cy='17' r='4' fill='%23FDCB6E'/%3E%3Ccircle cx='50' cy='29' r='3' fill='%2374B9FF'/%3E%3Ccircle cx='45' cy='42' r='3.5' fill='%23FDCB6E'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bl50:#E6F1FB;--bl100:#B5D4F4;--bl200:#74B9FF;--bl400:#0984E3;--bl600:#0770C4;
+  --am200:#FDCB6E;--am400:#F0A500;
+  --sl50:#F8F9FA;--sl100:#F1F3F5;--sl200:#E9ECEF;--sl300:#DEE2E6;--sl400:#ADB5BD;--sl600:#636E72;--sl700:#495057;--sl800:#2D3436;--sl900:#1a1a2e;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --r-md:8px;--r-lg:12px;--r-xl:16px;--r-2xl:24px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--sl800);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--sl200);border-radius:4px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);border-bottom:0.5px solid var(--sl200);height:64px;display:flex;align-items:center;padding:0 40px;transition:box-shadow .2s}
+nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,0.06)}
+.nav-logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.nav-logo-text{font-size:18px;font-weight:500;letter-spacing:1.5px;color:var(--bl400)}
+.nav-logo-iq{font-size:18px;font-weight:800;color:var(--am200);letter-spacing:-.3px}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto;margin-right:16px}
+.nl{font-size:13px;color:var(--sl600);padding:6px 12px;border-radius:var(--r-md);transition:background .12s,color .12s}
+.nl:hover{background:var(--sl50);color:var(--sl800)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:var(--r-md);font-size:13px;font-family:var(--font);font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;text-decoration:none}
+.btn-p{background:var(--bl400);color:#fff}
+.btn-p:hover{background:var(--bl600)}
+#mobileMenuBtn{display:none;background:none;border:none;cursor:pointer;padding:6px;margin-left:12px}
+#mobileMenu{display:none;position:fixed;top:64px;left:0;right:0;background:#fff;border-bottom:0.5px solid var(--sl200);padding:8px 16px 16px;z-index:199;flex-direction:column;gap:2px;box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+
+/* LAYOUT */
+.page-wrap{display:grid;grid-template-columns:240px 1fr;gap:0;max-width:1100px;margin:0 auto;padding:0 40px;min-height:100vh}
+
+/* SIDEBAR NAV */
+.legal-sidebar{padding:100px 40px 60px 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
+.sidebar-label{font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--sl400);margin-bottom:12px;margin-top:24px}
+.sidebar-label:first-child{margin-top:0}
+.sidebar-link{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sl600);padding:7px 10px;border-radius:var(--r-md);transition:background .12s,color .12s;margin-bottom:2px}
+.sidebar-link:hover{background:var(--sl50);color:var(--sl800)}
+.sidebar-link.active{background:var(--bl50);color:var(--bl400);font-weight:500}
+.sidebar-link i{font-size:15px;flex-shrink:0}
+.sidebar-updated{font-size:11px;color:var(--sl400);margin-top:24px;padding-top:16px;border-top:0.5px solid var(--sl200);line-height:1.6}
+
+/* CONTENT */
+.legal-content{padding:100px 0 80px 48px;border-left:0.5px solid var(--sl200)}
+.legal-section{padding-bottom:72px;border-bottom:0.5px solid var(--sl200);margin-bottom:72px}
+.legal-section:last-child{border-bottom:none;margin-bottom:0}
+.legal-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--bl400);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+.legal-eyebrow i{font-size:14px}
+.legal-section h2{font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-.8px;color:var(--sl900);margin-bottom:8px;line-height:1.2}
+.legal-section .effective{font-size:13px;color:var(--sl400);margin-bottom:24px}
+.legal-section h3{font-size:16px;font-weight:600;color:var(--sl900);margin-top:28px;margin-bottom:10px}
+.legal-section p{font-size:15px;color:var(--sl600);line-height:1.8;margin-bottom:14px}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{margin:10px 0 14px 0;padding-left:0;display:flex;flex-direction:column;gap:8px}
+.legal-section li{font-size:15px;color:var(--sl600);line-height:1.7;padding-left:20px;position:relative;list-style:none}
+.legal-section li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--bl400)}
+.legal-section a{color:var(--bl400);text-decoration:underline;text-underline-offset:2px}
+.legal-section a:hover{color:var(--bl600)}
+.highlight-box{background:var(--bl50);border:0.5px solid var(--bl100);border-radius:var(--r-lg);padding:16px 20px;margin:16px 0;display:flex;gap:12px;align-items:flex-start}
+.highlight-box i{font-size:18px;color:var(--bl400);flex-shrink:0;margin-top:1px}
+.highlight-box p{font-size:14px;color:var(--bl800);margin-bottom:0}
+.warning-box{background:#FFF8E6;border:0.5px solid #FAC775;border-radius:var(--r-lg);padding:16px 20px;margin:16px 0;display:flex;gap:12px;align-items:flex-start}
+.warning-box i{font-size:18px;color:var(--am400);flex-shrink:0;margin-top:1px}
+.warning-box p{font-size:14px;color:#633806;margin-bottom:0}
+.contact-card{background:var(--sl50);border:0.5px solid var(--sl200);border-radius:var(--r-xl);padding:20px 24px;margin-top:20px}
+.contact-card-title{font-size:14px;font-weight:600;color:var(--sl900);margin-bottom:6px}
+.contact-card-detail{font-size:13px;color:var(--sl600);line-height:1.7}
+.contact-card-detail a{color:var(--bl400)}
+.tag-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 11px;border-radius:10px;background:var(--bl50);color:var(--bl600);border:0.5px solid var(--bl100)}
+.tag i{font-size:13px}
+
+/* HERO TOP */
+.legal-hero{background:var(--sl50);border-bottom:0.5px solid var(--sl200);padding:100px 40px 40px;text-align:center}
+.legal-hero h1{font-size:clamp(28px,3.5vw,42px);font-weight:700;letter-spacing:-1px;color:var(--sl900);margin-bottom:10px}
+.legal-hero p{font-size:16px;color:var(--sl600);max-width:540px;margin:0 auto 24px}
+.legal-nav-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.legal-pill{font-size:13px;padding:7px 16px;border-radius:20px;border:0.5px solid var(--sl200);color:var(--sl600);transition:all .12s;background:#fff}
+.legal-pill:hover{border-color:var(--bl200);color:var(--bl400);background:var(--bl50)}
+
+/* FOOTER */
+footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,.06);padding:40px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.2)}
+.footer-links-row{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links-row a{font-size:12px;color:rgba(255,255,255,.35);transition:color .15s}
+.footer-links-row a:hover{color:rgba(255,255,255,.8)}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  #mobileMenuBtn{display:block !important}
+  .legal-hero{padding:90px 20px 32px}
+  .page-wrap{grid-template-columns:1fr;padding:0}
+  .legal-sidebar{display:none}
+  .legal-content{padding:32px 20px 60px;border-left:none}
+  .legal-section{padding-bottom:48px;margin-bottom:48px}
+  footer{padding:28px 20px}
+  .footer-inner{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo">
+    <svg width="30" height="30" viewBox="0 0 56 56" fill="none">
+      <rect width="56" height="56" rx="12" fill="#0984E3"/>
+      <rect x="12" y="15" width="22" height="5" rx="2.5" fill="white"/>
+      <rect x="12" y="25.5" width="17" height="5" rx="2.5" fill="white"/>
+      <rect x="12" y="36" width="22" height="5" rx="2.5" fill="white"/>
+      <rect x="12" y="15" width="5" height="26" rx="2.5" fill="white"/>
+      <circle cx="7" cy="7" r="2.5" fill="white" opacity=".25"/>
+      <circle cx="49" cy="7" r="2.5" fill="#FDCB6E" opacity=".7"/>
+      <circle cx="7" cy="49" r="2.5" fill="white" opacity=".18"/>
+      <circle cx="46" cy="17" r="3.5" fill="#FDCB6E"/>
+      <circle cx="50" cy="29" r="2.5" fill="#74B9FF"/>
+      <circle cx="45" cy="42" r="3" fill="#FDCB6E" opacity=".85"/>
+      <line x1="46" y1="20.5" x2="50" y2="26.5" stroke="#FDCB6E" stroke-width="1.1" opacity=".5"/>
+      <line x1="50" y1="31.5" x2="45" y2="39" stroke="#74B9FF" stroke-width="1.1" opacity=".4"/>
+    </svg>
+    <span class="nav-logo-text">elora</span><span class="nav-logo-iq"> IQ</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#how" class="nl">How it works</a>
+    <a href="index.html#features" class="nl">Features</a>
+    <a href="index.html#pricing" class="nl">Pricing</a>
+    <a href="about.html" class="nl">About</a>
+  </div>
+  <a href="index.html#waitlist" class="btn btn-p">Join waitlist <i class="ti ti-arrow-right"></i></a>
+  <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Menu">
+    <i class="ti ti-menu-2" style="font-size:22px;color:var(--sl800)"></i>
+  </button>
+</nav>
+<div id="mobileMenu">
+  <a href="index.html#how" class="nl" onclick="toggleMobileMenu()">How it works</a>
+  <a href="index.html#features" class="nl" onclick="toggleMobileMenu()">Features</a>
+  <a href="index.html#pricing" class="nl" onclick="toggleMobileMenu()">Pricing</a>
+  <a href="about.html" class="nl" onclick="toggleMobileMenu()">About</a>
+  <a href="index.html#waitlist" class="btn btn-p" style="margin-top:8px;justify-content:center">Join waitlist</a>
+</div>
+
+<!-- HERO -->
+<div class="legal-hero">
+  <h1>Legal & Policies</h1>
+  <p>Everything you need to know about how Elora IQ handles your data, your rights, and our commitments to you.</p>
+  <div class="legal-nav-pills">
+    <a href="#privacy" class="legal-pill"><i class="ti ti-shield" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Privacy policy</a>
+    <a href="#terms" class="legal-pill"><i class="ti ti-file-text" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Terms of service</a>
+    <a href="#cookies" class="legal-pill"><i class="ti ti-cookie" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Cookie policy</a>
+    <a href="#security" class="legal-pill"><i class="ti ti-lock" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Security</a>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="legal-sidebar">
+    <div class="sidebar-label">Policies</div>
+    <a href="#privacy" class="sidebar-link active"><i class="ti ti-shield"></i>Privacy policy</a>
+    <a href="#terms" class="sidebar-link"><i class="ti ti-file-text"></i>Terms of service</a>
+    <a href="#cookies" class="sidebar-link"><i class="ti ti-cookie"></i>Cookie policy</a>
+    <a href="#security" class="sidebar-link"><i class="ti ti-lock"></i>Security</a>
+
+    <div class="sidebar-label">Quick links</div>
+    <a href="index.html" class="sidebar-link"><i class="ti ti-home"></i>Homepage</a>
+    <a href="about.html" class="sidebar-link"><i class="ti ti-info-circle"></i>About</a>
+    <a href="mailto:hello@eloraiq.com" class="sidebar-link"><i class="ti ti-mail"></i>Contact us</a>
+
+    <div class="sidebar-updated">
+      Last updated<br>
+      <strong>June 2026</strong><br><br>
+      Questions? Email us at<br>
+      <a href="mailto:hello@eloraiq.com" style="color:var(--bl400)">hello@eloraiq.com</a>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="legal-content">
+
+    <!-- PRIVACY POLICY -->
+    <div class="legal-section" id="privacy">
+      <div class="legal-eyebrow"><i class="ti ti-shield"></i> Privacy policy</div>
+      <h2>Privacy policy</h2>
+      <div class="effective">Effective date: 1 June 2026 · Last updated: 26 June 2026</div>
+
+      <div class="highlight-box">
+        <i class="ti ti-info-circle"></i>
+        <p>Elora IQ is operated by Elora IQ ("we", "us", or "our"). This policy explains how we collect, use, and protect personal data when you use our platform at eloraiq.com. We comply with India's Digital Personal Data Protection Act 2023 (DPDP Act) and, where applicable, the EU General Data Protection Regulation (GDPR).</p>
+      </div>
+
+      <h3>1. Who we are</h3>
+      <p>Elora IQ is an AI-powered assessment platform operating under the name Elora IQ, based in India. We provide tools for organisations to create, administer, and mark assessments for hiring, internal promotions, skills certification, and compliance testing.</p>
+      <p>For any privacy-related queries, contact us at <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a>.</p>
+
+      <h3>2. Data we collect</h3>
+      <p>We collect the following categories of personal data:</p>
+      <ul>
+        <li><strong>Account data</strong> — name, email address, organisation name, and job title when you sign up or join the waitlist.</li>
+        <li><strong>Assessment data (organisations)</strong> — assessment configurations, question sets, candidate lists, and results that you create using our platform.</li>
+        <li><strong>Candidate data</strong> — name, email address, assessment answers, submission time, and integrity event logs (tab switches, copy-paste attempts, time off-tab) collected when a candidate takes an assessment.</li>
+        <li><strong>Usage data</strong> — browser type, device type, IP address, pages visited, and time spent on the platform — collected automatically via logs and analytics tools.</li>
+        <li><strong>Waitlist data</strong> — email address and the page you signed up from, if you join our early access waitlist.</li>
+      </ul>
+
+      <h3>3. How we use your data</h3>
+      <ul>
+        <li>To provide and improve the Elora IQ platform and its features.</li>
+        <li>To send you assessment reports, notifications, and platform updates.</li>
+        <li>To process waitlist signups and send early access communications.</li>
+        <li>To monitor platform security and detect fraudulent or abusive activity.</li>
+        <li>To comply with legal obligations under Indian law and applicable international regulations.</li>
+        <li>To conduct internal analytics to improve product quality and performance.</li>
+      </ul>
+
+      <h3>4. Candidate data — special notice</h3>
+      <div class="warning-box">
+        <i class="ti ti-alert-triangle"></i>
+        <p>Candidate assessment results, integrity reports, and AI marking breakdowns are shared only with the organisation that administered the assessment. Candidates do not have access to their own results through the Elora IQ platform. Organisations are responsible for communicating results to candidates in accordance with applicable employment and privacy laws.</p>
+      </div>
+
+      <h3>5. Legal basis for processing (GDPR)</h3>
+      <p>For users in the European Economic Area (EEA) and UK, we process personal data under the following lawful bases:</p>
+      <ul>
+        <li><strong>Contract performance</strong> — processing necessary to deliver the services you've signed up for.</li>
+        <li><strong>Legitimate interests</strong> — security monitoring, fraud prevention, and platform improvement.</li>
+        <li><strong>Consent</strong> — where you have explicitly opted in, such as joining our waitlist or receiving marketing communications.</li>
+        <li><strong>Legal obligation</strong> — where we are required to process data to comply with applicable laws.</li>
+      </ul>
+
+      <h3>6. Data sharing</h3>
+      <p>We do not sell your personal data. We share data only in the following circumstances:</p>
+      <ul>
+        <li><strong>Service providers</strong> — Supabase (database), Resend (email delivery), Anthropic (AI processing), and Vercel (hosting). Each is bound by data processing agreements.</li>
+        <li><strong>Legal compliance</strong> — where required by Indian law, court order, or regulatory authority.</li>
+        <li><strong>Business transfers</strong> — in the event of a merger, acquisition, or sale of assets, your data may be transferred to the successor entity.</li>
+      </ul>
+
+      <h3>7. Data retention</h3>
+      <ul>
+        <li>Waitlist data is retained until you request deletion or unsubscribe.</li>
+        <li>Assessment and candidate data is retained for as long as your account is active, plus 12 months after account closure.</li>
+        <li>Usage logs are retained for up to 90 days for security and debugging purposes.</li>
+      </ul>
+
+      <h3>8. Your rights</h3>
+      <p>Under the DPDP Act 2023 (India) and GDPR (EU/UK), you have the right to:</p>
+      <div class="tag-grid">
+        <span class="tag"><i class="ti ti-eye"></i>Access your data</span>
+        <span class="tag"><i class="ti ti-edit"></i>Correct inaccuracies</span>
+        <span class="tag"><i class="ti ti-trash"></i>Request deletion</span>
+        <span class="tag"><i class="ti ti-download"></i>Data portability</span>
+        <span class="tag"><i class="ti ti-ban"></i>Object to processing</span>
+        <span class="tag"><i class="ti ti-x"></i>Withdraw consent</span>
+      </div>
+      <p>To exercise any of these rights, email us at <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a>. We will respond within 30 days.</p>
+
+      <h3>9. International data transfers</h3>
+      <p>As a global platform with infrastructure hosted outside India (Vercel, Supabase, Anthropic), your data may be processed in the United States, European Union, or other jurisdictions. Where such transfers occur, we ensure appropriate safeguards are in place including standard contractual clauses and data processing agreements.</p>
+
+      <h3>10. Children's data</h3>
+      <p>Elora IQ is not intended for use by individuals under the age of 18. We do not knowingly collect personal data from minors. If you believe a minor has provided us with data, please contact us immediately at <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a>.</p>
+
+      <h3>11. Changes to this policy</h3>
+      <p>We may update this privacy policy from time to time. We will notify registered users of material changes by email. Continued use of the platform after changes constitutes acceptance of the updated policy.</p>
+
+      <div class="contact-card">
+        <div class="contact-card-title">Privacy contact</div>
+        <div class="contact-card-detail">Email: <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a><br>We aim to respond to all privacy queries within 30 days.</div>
+      </div>
+    </div>
+
+    <!-- TERMS OF SERVICE -->
+    <div class="legal-section" id="terms">
+      <div class="legal-eyebrow"><i class="ti ti-file-text"></i> Terms of service</div>
+      <h2>Terms of service</h2>
+      <div class="effective">Effective date: 1 June 2026 · Last updated: 26 June 2026</div>
+
+      <div class="highlight-box">
+        <i class="ti ti-info-circle"></i>
+        <p>These Terms of Service govern your access to and use of the Elora IQ platform. By signing up or using any part of the platform, you agree to these terms. If you do not agree, do not use the platform.</p>
+      </div>
+
+      <h3>1. Acceptance of terms</h3>
+      <p>By accessing eloraiq.com or using the Elora IQ platform in any capacity — as an organisation, administrator, or assessment participant — you agree to be bound by these Terms of Service, our Privacy Policy, and Cookie Policy.</p>
+
+      <h3>2. Description of service</h3>
+      <p>Elora IQ is a software-as-a-service (SaaS) platform that enables organisations to create AI-powered assessments, share them with participants, monitor assessment integrity in real time, and receive automated AI-marked reports. The platform is currently in an early access phase.</p>
+
+      <h3>3. Eligibility</h3>
+      <ul>
+        <li>You must be at least 18 years of age to create an account or use the platform as an organisation.</li>
+        <li>You must have the authority to bind your organisation to these terms if using Elora IQ on behalf of a company or entity.</li>
+        <li>Elora IQ is not available in jurisdictions where its use is prohibited by local law.</li>
+      </ul>
+
+      <h3>4. Accounts and access</h3>
+      <ul>
+        <li>You are responsible for maintaining the confidentiality of your account credentials.</li>
+        <li>You are responsible for all activity that occurs under your account.</li>
+        <li>You must notify us immediately at <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a> if you suspect unauthorised access to your account.</li>
+        <li>We reserve the right to suspend or terminate accounts that violate these terms.</li>
+      </ul>
+
+      <h3>5. Acceptable use</h3>
+      <p>You agree not to use Elora IQ to:</p>
+      <ul>
+        <li>Create assessments that are discriminatory, unlawful, misleading, or designed to harm participants.</li>
+        <li>Collect or process sensitive personal data (health, biometric, caste, religion, political affiliation) through assessments without appropriate legal basis and participant consent.</li>
+        <li>Attempt to reverse engineer, decompile, or extract the underlying AI models or platform code.</li>
+        <li>Use automated scripts or bots to interact with the platform in an abusive manner.</li>
+        <li>Resell, sublicense, or redistribute access to the platform without our written permission.</li>
+        <li>Violate any applicable law, regulation, or third-party right.</li>
+      </ul>
+
+      <h3>6. Assessment content and responsibility</h3>
+      <p>Organisations are solely responsible for:</p>
+      <ul>
+        <li>The legality and appropriateness of assessments created using Elora IQ.</li>
+        <li>Obtaining any necessary consent from assessment participants.</li>
+        <li>Communicating results to participants in accordance with applicable employment and privacy laws.</li>
+        <li>Ensuring that assessments are used fairly and without discrimination.</li>
+      </ul>
+      <p>Elora IQ provides AI-assisted tools but does not review or approve assessment content created by organisations.</p>
+
+      <h3>7. AI marking and accuracy</h3>
+      <div class="warning-box">
+        <i class="ti ti-alert-triangle"></i>
+        <p>AI marking provided by Elora IQ is intended to assist human decision-making, not replace it. While we aim for high accuracy, AI-generated marks and integrity scores are not infallible. Organisations should use Elora IQ results as one input in a broader evaluation process and not as the sole basis for employment, promotion, or certification decisions.</p>
+      </div>
+
+      <h3>8. Subscription and billing</h3>
+      <ul>
+        <li>Elora IQ offers Free, Pro ($49/month), and Business ($149/month) plans.</li>
+        <li>Paid plans are billed monthly. Subscriptions renew automatically unless cancelled.</li>
+        <li>Refunds are not provided for partial months. You may cancel at any time and retain access until the end of the billing period.</li>
+        <li>We reserve the right to change pricing with 30 days' notice to existing subscribers.</li>
+      </ul>
+
+      <h3>9. Intellectual property</h3>
+      <ul>
+        <li>Elora IQ retains all intellectual property rights in the platform, including its AI models, UI, and underlying code.</li>
+        <li>You retain ownership of assessment content you create on the platform.</li>
+        <li>By using the platform, you grant us a limited licence to process your content solely to deliver the service.</li>
+      </ul>
+
+      <h3>10. Limitation of liability</h3>
+      <p>To the fullest extent permitted by applicable law, Elora IQ shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform, including but not limited to loss of revenue, data, or business opportunity. Our total liability to you shall not exceed the amount you paid to us in the 12 months preceding the claim.</p>
+
+      <h3>11. Governing law</h3>
+      <p>These terms are governed by the laws of India. Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts of India. For users in the EU/UK, mandatory consumer protection rights under local law are not affected.</p>
+
+      <h3>12. Changes to terms</h3>
+      <p>We may update these terms at any time. Material changes will be communicated to registered users by email at least 14 days before taking effect. Continued use of the platform after changes constitutes acceptance of the updated terms.</p>
+
+      <div class="contact-card">
+        <div class="contact-card-title">Legal contact</div>
+        <div class="contact-card-detail">For questions about these terms: <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a></div>
+      </div>
+    </div>
+
+    <!-- COOKIE POLICY -->
+    <div class="legal-section" id="cookies">
+      <div class="legal-eyebrow"><i class="ti ti-cookie"></i> Cookie policy</div>
+      <h2>Cookie policy</h2>
+      <div class="effective">Effective date: 1 June 2026 · Last updated: 26 June 2026</div>
+
+      <p>This Cookie Policy explains what cookies are, which cookies Elora IQ uses, and how you can control them.</p>
+
+      <h3>What are cookies?</h3>
+      <p>Cookies are small text files placed on your device when you visit a website. They are widely used to make websites work efficiently, remember your preferences, and provide information to website owners.</p>
+
+      <h3>Cookies we use</h3>
+
+      <h3>Essential cookies</h3>
+      <p>These cookies are necessary for the platform to function and cannot be disabled. They include:</p>
+      <ul>
+        <li><strong>Session cookies</strong> — maintain your logged-in state while you use the platform.</li>
+        <li><strong>Security cookies</strong> — protect against cross-site request forgery (CSRF) attacks.</li>
+        <li><strong>Preference cookies</strong> — remember your UI preferences such as theme settings.</li>
+      </ul>
+
+      <h3>Analytics cookies</h3>
+      <p>We use analytics tools to understand how visitors use our website and platform. This helps us improve the product. Analytics data is aggregated and anonymised where possible. These cookies are only placed with your consent.</p>
+
+      <h3>Third-party cookies</h3>
+      <p>Some features of Elora IQ use third-party services that may set their own cookies:</p>
+      <ul>
+        <li><strong>Supabase</strong> — authentication and session management.</li>
+        <li><strong>Vercel</strong> — infrastructure analytics and performance monitoring.</li>
+      </ul>
+
+      <h3>How to control cookies</h3>
+      <p>You can control and delete cookies through your browser settings. Most browsers allow you to:</p>
+      <ul>
+        <li>View cookies stored on your device.</li>
+        <li>Delete all or specific cookies.</li>
+        <li>Block cookies from specific websites.</li>
+        <li>Block all third-party cookies.</li>
+      </ul>
+      <p>Note that disabling essential cookies may affect the functionality of the Elora IQ platform. For browser-specific instructions, visit your browser's help pages.</p>
+
+      <h3>Your consent</h3>
+      <p>By continuing to use eloraiq.com, you consent to the use of essential cookies. For non-essential analytics cookies, we will request your consent separately where required by applicable law (including GDPR for EU/UK users).</p>
+
+      <div class="contact-card">
+        <div class="contact-card-title">Cookie questions</div>
+        <div class="contact-card-detail">Contact us at <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a> for any questions about our use of cookies.</div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="legal-section" id="security">
+      <div class="legal-eyebrow"><i class="ti ti-lock"></i> Security</div>
+      <h2>Security</h2>
+      <div class="effective">Last updated: 26 June 2026</div>
+
+      <div class="highlight-box">
+        <i class="ti ti-shield-check"></i>
+        <p>Security is a core part of how Elora IQ is built — not an afterthought. This page outlines the measures we take to protect your data and the data of your assessment participants.</p>
+      </div>
+
+      <h3>Infrastructure security</h3>
+      <ul>
+        <li><strong>Hosting</strong> — Elora IQ is hosted on Vercel, which provides enterprise-grade infrastructure with DDoS protection, automatic SSL/TLS, and global edge deployment.</li>
+        <li><strong>Database</strong> — all data is stored in Supabase, which provides encrypted PostgreSQL databases with row-level security (RLS) enabled. Data is encrypted at rest and in transit.</li>
+        <li><strong>HTTPS</strong> — all connections to eloraiq.com are encrypted using TLS 1.2 or higher. HTTP connections are automatically redirected to HTTPS.</li>
+      </ul>
+
+      <h3>Data security</h3>
+      <ul>
+        <li><strong>Encryption at rest</strong> — all database data is encrypted at rest using AES-256.</li>
+        <li><strong>Encryption in transit</strong> — all data transmitted between your browser and our servers is encrypted using TLS.</li>
+        <li><strong>Access controls</strong> — database access is governed by row-level security policies ensuring organisations can only access their own data.</li>
+        <li><strong>API security</strong> — all API endpoints are authenticated. Public endpoints are rate-limited to prevent abuse.</li>
+      </ul>
+
+      <h3>Assessment integrity</h3>
+      <ul>
+        <li>Candidate results and integrity reports are visible only to the organisation that administered the assessment.</li>
+        <li>Candidates never have access to their results through the platform.</li>
+        <li>Each candidate receives a unique assessment link — shared links cannot be used by multiple people.</li>
+        <li>All integrity events (tab switches, copy-paste attempts, time off-tab) are logged with timestamps and stored securely.</li>
+      </ul>
+
+      <h3>AI and data processing</h3>
+      <p>Assessment answers are processed by Anthropic's Claude API for AI marking. Data sent to Anthropic is governed by Anthropic's data processing terms. We do not send personally identifiable information to Anthropic beyond what is necessary to mark assessment answers.</p>
+
+      <h3>Responsible disclosure</h3>
+      <p>We take security vulnerabilities seriously. If you discover a security issue in the Elora IQ platform, please report it responsibly before public disclosure:</p>
+      <div class="contact-card">
+        <div class="contact-card-title">Report a vulnerability</div>
+        <div class="contact-card-detail">
+          Email: <a href="mailto:hello@eloraiq.com">hello@eloraiq.com</a><br>
+          Subject line: <strong>Security disclosure — Elora IQ</strong><br><br>
+          Please include a description of the vulnerability, steps to reproduce it, and the potential impact. We will acknowledge your report within 48 hours and work to resolve confirmed issues as quickly as possible. We will not take legal action against researchers who act in good faith.
+        </div>
+      </div>
+
+      <h3>Our commitments</h3>
+      <div class="tag-grid">
+        <span class="tag"><i class="ti ti-lock"></i>TLS encryption in transit</span>
+        <span class="tag"><i class="ti ti-database"></i>AES-256 at rest</span>
+        <span class="tag"><i class="ti ti-shield-check"></i>Row-level security</span>
+        <span class="tag"><i class="ti ti-key"></i>API authentication</span>
+        <span class="tag"><i class="ti ti-eye-off"></i>No candidate result access</span>
+        <span class="tag"><i class="ti ti-refresh"></i>Regular security reviews</span>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">© 2026 Elora IQ. All rights reserved.</div>
+    <div class="footer-links-row">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="legal.html#privacy">Privacy</a>
+      <a href="legal.html#terms">Terms</a>
+      <a href="legal.html#cookies">Cookies</a>
+      <a href="legal.html#security">Security</a>
+      <a href="mailto:hello@eloraiq.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('mobileMenuBtn');
+  const isOpen = menu.style.display === 'flex';
+  menu.style.display = isOpen ? 'none' : 'flex';
+  btn.innerHTML = isOpen
+    ? '<i class="ti ti-menu-2" style="font-size:22px;color:var(--sl800)"></i>'
+    : '<i class="ti ti-x" style="font-size:22px;color:var(--sl800)"></i>';
+}
+
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 8);
+});
+
+// Highlight active sidebar link on scroll
+const sections = document.querySelectorAll('.legal-section');
+const sidebarLinks = document.querySelectorAll('.sidebar-link[href^="#"]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  sidebarLinks.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
