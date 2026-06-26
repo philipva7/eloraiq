@@ -1040,22 +1040,7 @@ footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,.06);padd
 <script>
 const SB_URL = 'https://jbtwxuxrxuldivtidqcs.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidHd4dXhyeHVsZGl2dGlkcWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTU5NTAsImV4cCI6MjA5Nzg3MTk1MH0.2DikBCmMqomg8v3Fb9sI87ka9_c17qSF96nn0bSCKA0';
-const RESEND_KEY = 're_K8kQaLxv_PfQ3558n3RX5F7zdJHEsEpme';
-
-async function sendNotification(email, source) {
-  try {
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + RESEND_KEY },
-      body: JSON.stringify({
-        from: 'Elora IQ <hello@eloraiq.com>',
-        to: ['hello@eloraiq.com'],
-        subject: '🎉 New waitlist signup — ' + email,
-        html: `<div style="font-family:-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:32px"><h2 style="font-size:20px;color:#1a1a2e">New waitlist signup</h2><p style="color:#636E72;margin:12px 0">Email: <strong style="color:#0984E3">${email}</strong></p><p style="color:#636E72">Source: ${source === 'about' ? 'About page' : 'Homepage'}</p></div>`
-      })
-    });
-  } catch(e) { console.warn('Notification failed:', e); }
-}
+// Email notifications temporarily disabled — backend proxy coming soon
 
 async function joinWaitlist(inputId, successId, formId) {
   const input = document.getElementById(inputId);
@@ -1074,7 +1059,6 @@ async function joinWaitlist(inputId, successId, formId) {
       body: JSON.stringify({ email, source })
     });
     if (res.ok || res.status === 409) {
-      await sendNotification(email, source);
       document.getElementById(formId).style.display = 'none';
       document.getElementById(successId).style.display = 'flex';
     } else { throw new Error(); }
