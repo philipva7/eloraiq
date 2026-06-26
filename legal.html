@@ -98,7 +98,8 @@ footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,.06);padd
 @media(max-width:900px){
   nav{padding:0 20px}
   .nav-links{display:none}
-  #mobileMenuBtn{display:block !important}
+  .nav-cta-btn{display:none}
+  #mobileMenuBtn{display:block !important;margin-left:auto}
   .legal-hero{padding:90px 20px 32px}
   .page-wrap{grid-template-columns:1fr;padding:0}
   .legal-sidebar{display:none}
@@ -137,7 +138,7 @@ footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,.06);padd
     <a href="index.html#pricing" class="nl">Pricing</a>
     <a href="about.html" class="nl">About</a>
   </div>
-  <a href="index.html#waitlist" class="btn btn-p">Join waitlist <i class="ti ti-arrow-right"></i></a>
+  <a href="index.html#waitlist" class="btn btn-p nav-cta-btn">Join waitlist <i class="ti ti-arrow-right"></i></a>
   <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Menu">
     <i class="ti ti-menu-2" style="font-size:22px;color:var(--sl800)"></i>
   </button>
