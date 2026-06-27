@@ -168,7 +168,7 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
 @keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
 
 /* PREVIEW PANEL */
-.prev-panel{flex:1;overflow-y:auto;padding:18px;background:var(--bg3)}
+.prev-panel{flex:1;overflow-y:auto;padding:18px;background:var(--bg3);max-height:calc(100vh - 120px)}
 .prev-card{background:var(--bg1);border-radius:var(--r-lg);border:.5px solid var(--bd1);padding:18px;margin-bottom:12px}
 .prev-title{font-size:15px;font-weight:500;color:var(--tx1);margin-bottom:3px}
 .prev-meta{font-size:11px;color:var(--tx3);margin-bottom:14px}
@@ -458,7 +458,7 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
     <button class="btn btn-sm btn-p" onclick="connectApi()"><i class="ti ti-plug"></i> Connect</button>
   </div>
   <div class="tb">
-    <div><div class="tb-title">AI assessment creator <span id="aiLiveBadge" style="display:none;font-size:11px;background:var(--t50);color:var(--t600);padding:2px 8px;border-radius:10px;margin-left:8px;font-weight:500">● Live AI</span></div><div class="tb-sub">Answer one question at a time — Elora IQ builds your assessment as you go</div></div>
+    <div><div class="tb-title">Elora — Assessment creator <span id="aiLiveBadge" style="display:none;font-size:11px;background:var(--t50);color:var(--t600);padding:2px 8px;border-radius:10px;margin-left:8px;font-weight:500">● Live AI</span></div><div class="tb-sub">Answer one question at a time — Elora IQ builds your assessment as you go</div></div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-sm" id="saveDraftBtn" onclick="saveDraft()"><i class="ti ti-device-floppy"></i> Save draft</button>
       <button class="btn btn-p btn-sm" id="publishBtn" onclick="nav('links')"><i class="ti ti-check"></i> Approve &amp; publish</button>
@@ -581,7 +581,7 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
           <div class="lobby-rule"><i class="ti ti-eye"></i> This test is monitored. Tab switching, copy-paste, and AI usage are detected and recorded.</div>
           <div class="lobby-rule"><i class="ti ti-clock"></i> The timer starts as soon as you click Start and cannot be paused.</div>
           <div class="lobby-rule"><i class="ti ti-device-laptop"></i> Use a stable internet connection and a laptop or desktop for best experience.</div>
-          <div class="lobby-rule"><i class="ti ti-mail"></i> Results will not be shared with you. The hiring team will review your submission.</div>
+          <div class="lobby-rule"><i class="ti ti-mail"></i> Results will not be shared with you. The assessment team will review your submission.</div>
         </div>
         <button class="btn btn-p" style="width:100%;justify-content:center;padding:10px" onclick="candTab(1,document.querySelectorAll('.cand-tab')[1])">
           <i class="ti ti-player-play"></i> Start assessment
@@ -633,7 +633,7 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
       <div class="submitted-card">
         <div class="submitted-icon"><i class="ti ti-check"></i></div>
         <div style="font-size:20px;font-weight:500;margin-bottom:8px;color:var(--tx1)">Assessment submitted</div>
-        <div style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:20px">Thank you for completing the assessment. Your responses have been recorded and will be reviewed by the hiring team.<br><br>Results are not shared with candidates. You will be contacted directly if you progress to the next stage.</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:20px">Thank you for completing the assessment. Your responses have been recorded and will be reviewed by the assessment team.<br><br>Results are not shared with participants. You will be contacted directly with next steps.</div>
         <div style="background:var(--bg2);border-radius:var(--r-md);padding:12px 15px;font-size:12px;color:var(--tx3);text-align:left">
           <div style="margin-bottom:5px"><i class="ti ti-clock" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i> Submitted · all questions answered</div>
           <div><i class="ti ti-shield-check" style="font-size:13px;vertical-align:-1px;margin-right:5px;color:var(--t600)"></i> Session integrity recorded</div>
@@ -1247,13 +1247,27 @@ function setSendDisabled(d) {
   const btn = document.getElementById('sendBtn');
   const inp = document.getElementById('crInp');
   if (btn) btn.disabled = d;
-  if (inp) inp.disabled = d;
+  if (inp) {
+    inp.disabled = d;
+    inp.style.opacity = d ? '0.5' : '1';
+    inp.style.cursor = d ? 'not-allowed' : 'auto';
+    if (!d) inp.placeholder = 'Type your answer or use the quick options…';
+  }
 }
 
 // ── CONVERSATION MACHINE ──────────────────────────────────────
 function startConversation() {
+  // Get user name from profile settings if available
+  // Try profile input, then sidebar display name, then settings name field
+  const profileInput = document.getElementById('profileName');
+  const sidebarName = document.getElementById('sidebarUserName');
+  const rawName = (profileInput && profileInput.value.trim()) 
+    || (sidebarName && sidebarName.textContent.trim())
+    || 'Philip';
+  const firstName = rawName.split(' ')[0] || 'Philip';
   Object.assign(state, {
-    stage: 'time', timeLimitMins: 0, role: '', mcqCount: 0,
+    stage: 'purpose', timeLimitMins: 0, role: '', purpose: '',
+    userName: firstName, mcqCount: 0,
     descriptiveCount: 0, challengeCount: 0, estimatedMins: 0,
     softSkills: [], customQuestions: [], generatedQuestions: []
   });
@@ -1261,9 +1275,10 @@ function startConversation() {
   document.getElementById('crMsgs').innerHTML = '';
   resetPreview();
   addAiMsg(
-    'Hi Philip! I\'m your Elora IQ assessment builder. Let\'s set up your test one step at a time.<br><br><strong>First: what is the total time limit for this assessment?</strong>',
-    [{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'},{label:'150 min',val:'150'}]
+    `Hi <strong>${firstName}</strong>! 👋 I\'m <strong>Elora</strong>, your AI assessment builder. Let\'s get started.<br><br><strong>What is this assessment for?</strong> Pick one or type your own.`,
+    [{label:'Hiring',val:'Hiring'},{label:'Internal promotion',val:'Internal promotion'},{label:'Skills certification',val:'Skills certification'},{label:'Compliance testing',val:'Compliance testing'}]
   );
+  setSendDisabled(false);
 }
 
 function chipSelected(val, label) { addUserMsg(label); processStageInput(val, label); }
@@ -1286,14 +1301,27 @@ function processStageInput(raw, display) {
   setSendDisabled(true);
   switch (state.stage) {
 
+    case 'purpose': {
+      state.purpose = display.trim();
+      state.stage = 'time';
+      const purposeContext = `a ${state.purpose.toLowerCase()} assessment`;
+      askClaude(
+        `User ${state.userName} wants to create ${purposeContext}. Acknowledge warmly by name in one sentence, then ask for the total time limit. Mention they can pick from chips or type their own.`,
+        [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}],
+        () => addAiMsg(`Perfect — let\'s build your <strong>${state.purpose.toLowerCase()}</strong> assessment, <strong>${state.userName}</strong>! 💪<br><br><strong>What\'s the total time limit?</strong> Pick one below or type your own duration.`,
+          [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}])
+      );
+      break;
+    }
+
     case 'time': {
       const mins = extractNumber(raw, 90);
       state.timeLimitMins = mins;
       state.stage = 'role';
       askClaude(
-        `User chose ${mins} minutes as their time limit. Confirm warmly in one sentence and ask what role they're hiring for.`,
+        `User ${state.userName} chose ${mins} minutes for their ${state.purpose} assessment. Confirm warmly in one sentence and ask what role, skill, or topic this assessment covers.`,
         null,
-        () => addAiMsg(`Got it — <strong>${mins} minutes</strong>. I'll track the budget as we go.<br><br><strong>What role are you hiring for?</strong>`)
+        () => addAiMsg(`Got it — <strong>${mins} minutes</strong>. I'll track the budget as we go.<br><br><strong>What role, skill, or topic is this assessment covering?</strong>`)
       );
       break;
     }
@@ -1302,9 +1330,9 @@ function processStageInput(raw, display) {
       state.role = display.trim();
       state.stage = 'mcq';
       askClaude(
-        `User is hiring for: "${state.role}". Acknowledge positively in one sentence, then ask how many multiple choice questions they want (each ~1.5 min). Suggest 10–25.`,
+        `User wants to assess: "${state.role}" for ${state.purpose}. Acknowledge positively in one sentence, then ask how many multiple choice questions they want (each ~1.5 min). Suggest 10–25.`,
         [{label:'10',val:'10'},{label:'15',val:'15'},{label:'20',val:'20'},{label:'25',val:'25'}],
-        () => addAiMsg(`<strong>${state.role}</strong> — great choice.<br><br><strong>How many multiple choice questions?</strong> (~1.5 min each)`,
+        () => addAiMsg(`<strong>${state.role}</strong> — great.<br><br><strong>How many multiple choice questions?</strong> (~1.5 min each)`,
           [{label:'10',val:'10'},{label:'15',val:'15'},{label:'20',val:'20'},{label:'25',val:'25'}])
       );
       break;
@@ -1403,10 +1431,16 @@ function processStageInput(raw, display) {
     }
 
     case 'done': {
+      const editPrompt = `User ${state.userName || 'the user'} said: "${display}". 
+They are reviewing a generated assessment for: "${state.role}" (${state.purpose}).
+The assessment has ${state.mcqCount} MCQ, ${state.descriptiveCount} descriptive, ${state.challengeCount} coding challenges.
+If they want to edit/change/remove/add questions, acknowledge and tell them to specify which question number and what change they want — you will update it.
+If they ask to regenerate, confirm you will.
+Keep response to 1-2 sentences, warm and helpful.`;
       askClaude(
-        `User said: "${display}". They are reviewing a generated ${state.role} assessment. Respond helpfully in 1-2 sentences.`,
+        editPrompt,
         null,
-        () => addAiMsg('Your assessment is saved. Ask me to adjust anything before publishing.')
+        () => addAiMsg(`Your assessment is ready, <strong>${state.userName || 'there'}</strong>! 🎉 You can ask me to edit any question, change the weighting, add or remove questions, or regenerate the whole assessment.`)
       );
       break;
     }
@@ -1428,7 +1462,7 @@ async function askClaude(prompt, chips, fallbackFn) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6', max_tokens: 120,
-        system: 'You are Elora IQ\'s assessment builder assistant — warm, concise, professional. Max 2 sentences. Use <strong> for emphasis. No bullet points, no markdown, no lists.',
+        system: 'You are Elora, Elora IQ\'s friendly AI assessment builder. You help create assessments for any purpose — hiring, internal promotions, skills certification, compliance testing, and more. Be warm, address the user by name when you know it, and be concise. Max 2 sentences. Use <strong> for emphasis. No bullet points, no markdown, no lists.',
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -1591,6 +1625,16 @@ function showPreviewLoading() {
     </div>`;
 }
 
+function calcWeightage(questions) {
+  // Assign weightage by type and importance
+  const typeWeights = { mcq: 1, descriptive: 3, challenge: 5, softskill: 2, custom: 2 };
+  let total = questions.reduce((s, q) => s + (typeWeights[q.type] || 1), 0);
+  return questions.map(q => {
+    const raw = typeWeights[q.type] || 1;
+    return { ...q, weight: raw, weightPct: Math.round((raw / total) * 100) };
+  });
+}
+
 function renderPreview(assessment) {
   document.getElementById('prevCard').innerHTML = `<div class="prev-title" id="prevTitle"></div><div class="prev-meta" id="prevMeta"></div><div id="prevQs"></div>`;
   const totalQ = state.mcqCount + state.descriptiveCount + state.challengeCount + state.softSkills.length + state.customQuestions.length;
@@ -1606,26 +1650,63 @@ function renderPreview(assessment) {
   if (state.customQuestions.length) parts.push(`${state.customQuestions.length} custom`);
   parts.push(`${state.timeLimitMins} min · AI-generated · Saved ✓`);
   document.getElementById('prevMeta').textContent = parts.join(' · ');
+
   const qsContainer = document.getElementById('prevQs');
   qsContainer.innerHTML = '';
+
+  // Weightage summary bar
+  const totalMCQw = state.mcqCount * 1;
+  const totalDescW = state.descriptiveCount * 3;
+  const totalChalW = state.challengeCount * 5;
+  const totalSoftW = state.softSkills.length * 2;
+  const totalCustW = state.customQuestions.length * 2;
+  const totalW = totalMCQw + totalDescW + totalChalW + totalSoftW + totalCustW || 1;
+  const wSummary = document.createElement('div');
+  wSummary.style.cssText = 'background:var(--bg2);border-radius:8px;padding:10px 12px;margin-bottom:10px;border:0.5px solid var(--bd1)';
+  wSummary.innerHTML = `
+    <div style="font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:8px">Weightage breakdown</div>
+    <div style="display:flex;gap:0;height:6px;border-radius:3px;overflow:hidden;margin-bottom:8px">
+      ${totalMCQw ? `<div style="width:${Math.round(totalMCQw/totalW*100)}%;background:var(--p400)"></div>` : ''}
+      ${totalDescW ? `<div style="width:${Math.round(totalDescW/totalW*100)}%;background:var(--t400,#00cec9)"></div>` : ''}
+      ${totalChalW ? `<div style="width:${Math.round(totalChalW/totalW*100)}%;background:var(--a400,#f0a500)"></div>` : ''}
+      ${totalSoftW ? `<div style="width:${Math.round(totalSoftW/totalW*100)}%;background:#6C5CE7"></div>` : ''}
+      ${totalCustW ? `<div style="width:${Math.round(totalCustW/totalW*100)}%;background:var(--co400,#e17055)"></div>` : ''}
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      ${totalMCQw ? `<span style="font-size:10px;color:var(--tx3)"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--p400);margin-right:4px"></span>MCQ ${Math.round(totalMCQw/totalW*100)}%</span>` : ''}
+      ${totalDescW ? `<span style="font-size:10px;color:var(--tx3)"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#00cec9;margin-right:4px"></span>Descriptive ${Math.round(totalDescW/totalW*100)}%</span>` : ''}
+      ${totalChalW ? `<span style="font-size:10px;color:var(--tx3)"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f0a500;margin-right:4px"></span>Challenges ${Math.round(totalChalW/totalW*100)}%</span>` : ''}
+      ${totalSoftW ? `<span style="font-size:10px;color:var(--tx3)"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#6C5CE7;margin-right:4px"></span>Soft skills ${Math.round(totalSoftW/totalW*100)}%</span>` : ''}
+      ${totalCustW ? `<span style="font-size:10px;color:var(--tx3)"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#e17055;margin-right:4px"></span>Custom ${Math.round(totalCustW/totalW*100)}%</span>` : ''}
+    </div>
+  `;
+  qsContainer.appendChild(wSummary);
+
   const labels = { mcq:'MCQ', descriptive:'Descriptive', challenge:'Coding challenge', softskill:'Soft skill', custom:'Custom question' };
-  assessment.questions.slice(0,5).forEach((q,i) => {
+  const typeWeights = { mcq: 1, descriptive: 3, challenge: 5, softskill: 2, custom: 2 };
+
+  // Show ALL questions — no slice
+  assessment.questions.forEach((q,i) => {
     const div = document.createElement('div');
     div.className = 'q-blk';
     let lbl = labels[q.type] || q.type;
     if (q.skill) lbl += ` · ${q.skill}`;
-    if (q.type === 'custom') lbl += ' · Suggestive marks';
-    let inner = `<div class="q-lbl" style="${q.type==='custom'?'color:var(--a600)':''}">${lbl} · Q${i+1}</div><div class="q-txt">${q.text}</div>`;
-    if (q.type === 'mcq' && q.options) inner += '<div class="q-opts">' + q.options.map((o,oi)=>`<div class="q-opt ${oi===q.correct?'ok':''}"><div class="q-dot"></div> ${o}</div>`).join('') + '</div>';
+    if (q.type === 'custom') lbl += ' · Suggestive';
+    const qWeight = typeWeights[q.type] || 1;
+    const qWeightPct = Math.round((qWeight / totalW) * 100);
+    let inner = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="q-lbl" style="${q.type==='custom'?'color:var(--a600)':q.type==='challenge'?'color:var(--a400)':''}">${lbl} · Q${i+1}</div>
+        <div style="font-size:10px;font-weight:600;color:var(--p600);background:var(--p50);padding:1px 7px;border-radius:8px">${qWeightPct}%</div>
+      </div>
+      <div class="q-txt">${q.text}</div>`;
+    if (q.type === 'mcq' && q.options) {
+      inner += '<div class="q-opts">' + q.options.map((o,oi)=>`<div class="q-opt ${oi===q.correct?'ok':''}"><div class="q-dot"></div> ${o}</div>`).join('') + '</div>';
+    }
     div.innerHTML = inner;
     qsContainer.appendChild(div);
   });
-  if (totalQ > 5) {
-    const more = document.createElement('div');
-    more.className = 'prev-more';
-    more.textContent = `+ ${totalQ - 5} more question${totalQ-5===1?'':'s'}`;
-    qsContainer.appendChild(more);
-  }
+
   // Update lobby
   const lobbyQ = document.getElementById('lobbyQCount');
   const lobbyT = document.getElementById('lobbyTime');
