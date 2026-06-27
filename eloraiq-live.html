@@ -52,10 +52,10 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 .app{display:flex;height:100vh;overflow:hidden}
-.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;height:100vh;min-height:0}
 .screen{display:none;flex-direction:column;height:100%}
-.screen.active{display:flex}
-.content{flex:1;overflow-y:auto}
+.screen.active{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
 
 /* SIDEBAR */
 .sb{width:222px;min-width:222px;background:var(--bg1);border-right:.5px solid var(--bd1);display:flex;flex-direction:column}
@@ -141,15 +141,15 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
 .a-stat{font-size:11px;color:var(--tx2);text-align:right}
 
 /* CREATOR */
-.cr-layout{display:flex;overflow:hidden;align-items:stretch}
-.cr-chat{width:380px;min-width:380px;max-width:380px;border-right:.5px solid var(--bd1);display:flex;flex-direction:column;background:var(--bg1);overflow:hidden}
+.cr-layout{display:flex;overflow:hidden;align-items:stretch;flex:1;min-height:0}
+.cr-chat{width:380px;min-width:380px;max-width:380px;border-right:.5px solid var(--bd1);display:flex;flex-direction:column;background:var(--bg1);overflow:hidden;min-height:0}
 .cr-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto;min-height:0}
 .msg{display:flex;gap:8px}
 .msg-ai .bub{background:var(--bg2);border-radius:0 12px 12px 12px;padding:9px 12px;font-size:13px;line-height:1.6;max-width:300px;color:var(--tx1)}
 .msg-u{flex-direction:row-reverse}
 .msg-u .bub{background:var(--p600);color:#fff;border-radius:12px 0 12px 12px;padding:9px 12px;font-size:13px;line-height:1.6;max-width:260px}
 .m-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;margin-top:2px}
-.ai-av-c{background:var(--p50);color:var(--p800)}
+.ai-av-c{background:linear-gradient(135deg,#E6F1FB,#EEE6FF);color:#5B4FD4}
 .u-av-c{background:var(--bg2);color:var(--tx2)}
 .warn-bub{display:flex;gap:8px;background:var(--a50);border:.5px solid var(--a100);border-radius:var(--r-md);padding:9px 12px;font-size:12px;color:var(--a600);line-height:1.6}
 .warn-bub i{flex-shrink:0;font-size:15px;margin-top:1px}
@@ -1154,7 +1154,7 @@ function addAiMsg(html, chips) {
   div.className = 'msg msg-ai';
   const avEl = document.createElement('div');
   avEl.className = 'm-av ai-av-c';
-  avEl.innerHTML = '<i class="ti ti-brain" style="font-size:11px"></i>';
+  avEl.innerHTML = '<i class="ti ti-sparkles" style="font-size:11px"></i>';
   const bubEl = document.createElement('div');
   bubEl.className = 'bub';
   bubEl.innerHTML = html;
@@ -1200,7 +1200,7 @@ function showTyping() {
   const div = document.createElement('div');
   div.className = 'msg msg-ai';
   div.id = 'typingIndicator';
-  div.innerHTML = '<div class="m-av ai-av-c"><i class="ti ti-brain" style="font-size:11px"></i></div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  div.innerHTML = '<div class="m-av ai-av-c"><i class="ti ti-sparkles" style="font-size:11px"></i></div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
   feed.appendChild(div);
   feed.scrollTop = feed.scrollHeight;
 }
@@ -1218,7 +1218,11 @@ function setSendDisabled(d) {
     inp.disabled = d;
     inp.style.opacity = d ? '0.5' : '1';
     inp.style.cursor = d ? 'not-allowed' : 'auto';
-    if (!d) inp.placeholder = 'Type your answer or use the quick options…';
+    if (!d) {
+      inp.placeholder = 'Type your answer or use the quick options…';
+      // Auto-focus so user can type immediately
+      requestAnimationFrame(() => inp.focus());
+    }
   }
 }
 
@@ -1269,8 +1273,247 @@ function extractNumber(str, fallback) {
   return isNaN(n) ? fallback : n;
 }
 
-function processStageInput(raw, display) {
+function hasNumber(str) {
+  return /\d/.test(str || '');
+}
+
+function isRandomInput(str) {
+  // Basic quick checks — Claude handles deeper validation
+  const s = (str || '').toLowerCase().trim();
+  if (s.length < 1) return true;
+  const obvious = ['lol','haha','😂','😅','test','asdf','qwerty','xyz','abc'];
+  return obvious.some(u => s === u);
+}
+
+// Ask Claude if the user's input is a valid answer for the current stage
+async function checkIfValidAnswer(userInput, stage, questionContext) {
+  // Quick local checks first — faster and cheaper than Claude
+  const s = userInput.toLowerCase().trim();
+
+  // Universal "not an answer" phrases
+  const notAnswers = [
+    'i dont know', "i don't know", 'not sure', 'unsure', 'no idea',
+    'still thinking', 'i am thinking', 'let me think', 'thinking',
+    'maybe', 'perhaps', 'possibly', 'idk', 'dunno', 'hmm', 'hm',
+    'uh', 'um', 'err', 'what?', 'huh?', 'ok', 'okay', 'sure',
+    'yes', 'no', // too vague for purpose/role stages
+    'i need help', 'help', 'help me', 'i need',
+    'what should i', 'what do you', 'what can i',
+    'anything', 'something', 'whatever', 'anything works',
+    'you decide', 'you choose', 'up to you', 'your choice',
+    'i am not sure', "i'm not sure", "i'm thinking", "i'm still",
+  ];
+
+  if (notAnswers.some(p => s === p || s.startsWith(p + ' ') || s.endsWith(' ' + p))) {
+    return false;
+  }
+
+  // For numeric stages, must contain a digit or a word number
+  const numericStages = ['mcq', 'descriptive', 'challenges', 'time'];
+  const wordNumbers = ['one','two','three','four','five','six','seven','eight','nine','ten',
+    'fifteen','twenty','thirty','forty','fifty','sixty','ninety','hundred','none','zero','no'];
+  if (numericStages.includes(stage)) {
+    const hasDigit = /\d/.test(s);
+    const hasWordNum = wordNumbers.some(w => s.includes(w));
+    if (!hasDigit && !hasWordNum) return false;
+  }
+
+  // For purpose stage — must be a meaningful purpose descriptor
+  if (stage === 'purpose' && s.length < 4) return false;
+
+  // For role stage — must be a meaningful topic (not just filler)
+  if (stage === 'role' && s.length < 3) return false;
+
+  // Input looks valid
+  return true;
+}
+
+// Stage-specific context for clarification
+function getStageContext(stage) {
+  const contexts = {
+    purpose:     { q: 'what the assessment is for (e.g. hiring, internal promotion, skills certification)', chips: [{label:'Hiring',val:'Hiring'},{label:'Internal promotion',val:'Internal promotion'},{label:'Skills certification',val:'Skills certification'},{label:'Compliance testing',val:'Compliance testing'}] },
+    role:        { q: 'the role, skill, or topic this assessment should cover (e.g. "DevOps Engineer", "Python", "GDPR compliance")', chips: null },
+    time:        { q: 'the total time limit in minutes', chips: [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}] },
+    mcq:         { q: 'how many multiple choice questions to include (10-25 recommended, ~1.5 min each)', chips: [{label:'10',val:'10'},{label:'15',val:'15'},{label:'20',val:'20'},{label:'25',val:'25'}] },
+    descriptive: { q: 'how many descriptive questions to include (0-3 recommended, ~10 min each)', chips: [{label:'1',val:'1'},{label:'2',val:'2'},{label:'3',val:'3'},{label:'None',val:'0'}] },
+    challenges:  { q: 'how many coding or technical challenges to include (0-2, ~20 min each)', chips: [{label:'1 challenge',val:'1'},{label:'2 challenges',val:'2'},{label:'None',val:'0'}] },
+    softskills:  { q: 'whether to include soft skill tests like communication or problem-solving', chips: [{label:'Communication + problem-solving',val:'communication_problem'},{label:'Communication only',val:'communication'},{label:'No soft skills',val:'none'}] },
+    custom:      { q: 'whether to add any custom questions', chips: [{label:'Yes, add a custom question',val:'yes'},{label:'No — generate now',val:'no'}] },
+    collecting_custom: { q: 'a custom question to add (or say "done" when finished)', chips: null },
+  };
+  return contexts[stage] || null;
+}
+
+async function clarifyInput(stage, userSaid, chips, fallbackMsg) {
+  const stageContext = {
+    mcq: `how many multiple choice questions they want (suggest 10-25, each ~1.5 min)`,
+    descriptive: `how many descriptive questions they want (0-3, each ~10 min)`,
+    challenges: `how many coding/technical challenges they want (0-2, each ~20 min)`,
+    softskills: `whether to include soft skill tests like communication or problem-solving`,
+    time: `the total time limit for the assessment in minutes`,
+    role: `the role, skill, or topic this assessment should cover`,
+    purpose: `what the assessment is for (hiring, promotion, certification, etc)`,
+  };
+  const context = stageContext[stage] || 'their answer';
+  showTyping();
+  try {
+    const r = await fetch('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6', max_tokens: 120,
+        system: 'You are Elora, a friendly AI assessment builder. Be warm and gently redirect the user back to the question. Max 2 sentences. Use <strong> for emphasis. No bullet points.',
+        messages: [{ role: 'user', content:
+          `The user said: "${userSaid}". I was asking them ${context}. Their response doesn\'t answer the question. Gently clarify what I need from them in a warm, friendly way.`
+        }]
+      })
+    });
+    const data = await r.json();
+    removeTyping();
+    const reply = data?.content?.[0]?.text?.trim();
+    if (reply) {
+      addAiMsg(reply, chips);
+    } else {
+      addAiMsg(fallbackMsg, chips);
+    }
+  } catch(e) {
+    removeTyping();
+    addAiMsg(fallbackMsg, chips);
+  }
+  setSendDisabled(false);
+}
+
+async function processStageInput(raw, display) {
   setSendDisabled(true);
+
+  // ── Map typed text to chip values (chips = typing shortcuts) ─
+  const lower = raw.toLowerCase().trim();
+  const textToChip = {
+    // Restart / change
+    'start over': '__RESTART__', 'start again': '__RESTART__',
+    'restart': '__RESTART__', 'reset': '__RESTART__',
+    'begin again': '__RESTART__', 'start fresh': '__RESTART__',
+    'redo': '__RESTART__', 'cancel': '__RESTART__',
+    'change a detail': '__CHANGE__', 'change detail': '__CHANGE__',
+    'change role': '__CHANGE_ROLE__', 'change topic': '__CHANGE_ROLE__',
+    'change purpose': '__CHANGE_PURPOSE__', 'change time': '__CHANGE_TIME__',
+    'change time limit': '__CHANGE_TIME__', 'change questions': '__CHANGE_QUESTIONS__',
+    // Purpose chips
+    'hiring': 'Hiring', 'hire': 'Hiring',
+    'internal promotion': 'Internal promotion', 'promotion': 'Internal promotion', 'promote': 'Internal promotion',
+    'skills certification': 'Skills certification', 'certification': 'Skills certification', 'certify': 'Skills certification',
+    'compliance testing': 'Compliance testing', 'compliance': 'Compliance testing',
+    // Soft skills chips
+    'communication + problem-solving': 'communication_problem',
+    'communication and problem solving': 'communication_problem',
+    'both': 'communication_problem',
+    'communication only': 'communication', 'communication': 'communication',
+    'no soft skills': 'none', 'none': 'none', 'skip': 'none', 'no': 'none',
+    // Yes/no chips
+    'yes': 'yes', 'yes add a custom question': 'yes', 'add custom': 'yes',
+    'no generate now': 'no', 'generate now': 'no', 'generate': 'no',
+    'done': 'done',
+  };
+  const mappedVal = textToChip[lower];
+  if (mappedVal && mappedVal !== raw) {
+    // Re-process with the chip value
+    await processStageInput(mappedVal, display);
+    return;
+  }
+
+  // ── Detect change/restart intent via phrasing ─────────────
+  const isRestartIntent = ['actually', 'instead', 'switch', 'different assessment',
+    'change assessment', 'new assessment', 'change it to', 'let\'s do', 'let me do',
+    'i want to do', 'make it', 'do a different'].some(p => lower.includes(p));
+
+  const earlyStages = ['purpose', 'name', 'idle'];
+  const isEarlyStage = earlyStages.includes(state.stage);
+
+  if (!isEarlyStage && state.stage !== 'done' && isRestartIntent) {
+    askClaude(
+      `You are Elora, a friendly AI assessment builder. The user ${state.userName} said: "${display}" while building a ${state.purpose} assessment for "${state.role}". They seem to want to change something. Ask warmly: do they want to start fresh or change a specific detail? One sentence. No markdown asterisks.`,
+      [{label:'Start over', val:'__RESTART__'},{label:'Change a detail', val:'__CHANGE__'}],
+      () => addAiMsg(`No problem, <strong>${state.userName}</strong>! Do you want to <strong>start fresh</strong> or just <strong>change a specific detail</strong>?`,
+        [{label:'Start over', val:'__RESTART__'},{label:'Change a detail', val:'__CHANGE__'}])
+    );
+    return;
+  }
+
+  // Handle restart/change confirmations
+  if (raw === '__RESTART__') {
+    addAiMsg(`Got it — let\'s start fresh! 🔄`);
+    setTimeout(() => startConversation(), 600);
+    return;
+  }
+
+  if (raw === '__CHANGE__') {
+    askClaude(
+      `You are Elora. Ask the user ${state.userName} what specifically they want to change — the topic/role, the purpose, the time limit, or the question types. One friendly sentence.`,
+      [{label:'Change topic/role', val:'__CHANGE_ROLE__'},
+       {label:'Change purpose', val:'__CHANGE_PURPOSE__'},
+       {label:'Change time limit', val:'__CHANGE_TIME__'},
+       {label:'Change question types', val:'__CHANGE_QUESTIONS__'}],
+      () => addAiMsg(`What would you like to change?`,
+        [{label:'Topic / role', val:'__CHANGE_ROLE__'},
+         {label:'Purpose', val:'__CHANGE_PURPOSE__'},
+         {label:'Time limit', val:'__CHANGE_TIME__'},
+         {label:'Question types', val:'__CHANGE_QUESTIONS__'}])
+    );
+    return;
+  }
+
+  if (raw === '__CHANGE_ROLE__') {
+    state.stage = 'role';
+    addAiMsg(`Sure! <strong>What role, skill, or topic should this assessment cover instead?</strong>`);
+    setSendDisabled(false);
+    return;
+  }
+
+  if (raw === '__CHANGE_PURPOSE__') {
+    state.stage = 'purpose';
+    addAiMsg(`Of course! <strong>What is this assessment for?</strong>`,
+      [{label:'Hiring',val:'Hiring'},{label:'Internal promotion',val:'Internal promotion'},
+       {label:'Skills certification',val:'Skills certification'},{label:'Compliance testing',val:'Compliance testing'}]);
+    setSendDisabled(false);
+    return;
+  }
+
+  if (raw === '__CHANGE_TIME__') {
+    state.stage = 'time';
+    addAiMsg(`No problem! <strong>What should the new time limit be?</strong>`,
+      [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}]);
+    setSendDisabled(false);
+    return;
+  }
+
+  if (raw === '__CHANGE_QUESTIONS__') {
+    state.stage = 'mcq';
+    const used = Math.round(state.mcqCount * 1.5) + state.descriptiveCount * 10 + state.challengeCount * 20;
+    addAiMsg(`Sure! Let\'s redo the question setup. <strong>How many multiple choice questions?</strong> (~1.5 min each)`,
+      [{label:'10',val:'10'},{label:'15',val:'15'},{label:'20',val:'20'},{label:'25',val:'25'}]);
+    setSendDisabled(false);
+    return;
+  }
+
+  // ── Universal Claude-powered input validator ─────────────────
+  const stagesWithValidation = ['purpose','role','time','mcq','descriptive','challenges','softskills','custom','collecting_custom'];
+  if (stagesWithValidation.includes(state.stage) && state.stage !== 'collecting_custom') {
+    const ctx = getStageContext(state.stage);
+    if (ctx) {
+      // Quick obvious check first
+      if (isRandomInput(raw)) {
+        clarifyInput(state.stage, display, ctx.chips, `I didn't quite catch that! Could you help me with <strong>${ctx.q}</strong>?`);
+        return;
+      }
+      // Ask Claude if this input actually answers the question
+      const isValid = await checkIfValidAnswer(raw, state.stage, ctx.q);
+      if (!isValid) {
+        clarifyInput(state.stage, display, ctx.chips, `I didn't quite catch that! Could you help me with <strong>${ctx.q}</strong>?`);
+        return;
+      }
+    }
+  }
+
   switch (state.stage) {
 
     case 'purpose': {
@@ -1278,41 +1521,61 @@ function processStageInput(raw, display) {
       const rawPurpose = display.trim();
       const knownPurposes = ['Hiring','Internal promotion','Skills certification','Compliance testing'];
       state.purpose = knownPurposes.find(p => rawPurpose.toLowerCase().includes(p.toLowerCase())) || rawPurpose;
-      state.stage = 'time';
+      state.stage = 'role';
       askClaude(
-        `You are Elora, a friendly AI assessment builder. The user ${state.userName} said they want: "${rawPurpose}". Understand what kind of assessment they need, give it a short clear label (e.g. "self-assessment", "team skills check"), acknowledge warmly by name in one sentence using that label, then ask for the total time limit mentioning they can pick or type their own. Max 2 sentences.`,
-        [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}],
-        () => addAiMsg(`Got it, <strong>${state.userName}</strong>! Let\'s build your <strong>${state.purpose.toLowerCase()}</strong> assessment. 💪<br><br><strong>What\'s the total time limit?</strong> Pick one below or type your own.`,
-          [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}])
+        `You are Elora, a friendly AI assessment builder. The user ${state.userName} said they want: "${rawPurpose}". Warmly acknowledge by name in one sentence, then ask what specific role, skill, or topic this assessment should cover (e.g. "What role or skill is this self-assessment focused on?"). Be curious and friendly. Max 2 sentences. No markdown asterisks — use <strong> for bold.`,
+        null,
+        () => addAiMsg(`Got it, <strong>${state.userName}</strong>! 🎯<br><br><strong>What role, skill, or topic should this assessment cover?</strong>`)
       );
       break;
     }
 
     case 'time': {
+      if (!hasNumber(raw) && isRandomInput(raw)) {
+        clarifyInput('time', display,
+          [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}],
+          `I need a time limit! <strong>How long should this assessment be?</strong> Pick one or type your own in minutes.`,
+        );
+        return;
+      }
       const mins = extractNumber(raw, 90);
       state.timeLimitMins = mins;
-      state.stage = 'role';
-      askClaude(
-        `User ${state.userName} chose ${mins} minutes for their ${state.purpose} assessment. Confirm warmly in one sentence and ask what role, skill, or topic this assessment covers.`,
-        null,
-        () => addAiMsg(`Got it — <strong>${mins} minutes</strong>. I'll track the budget as we go.<br><br><strong>What role, skill, or topic is this assessment covering?</strong>`)
-      );
-      break;
-    }
-
-    case 'role': {
-      state.role = display.trim();
       state.stage = 'mcq';
       askClaude(
-        `User wants to assess: "${state.role}" for ${state.purpose}. Acknowledge positively in one sentence, then ask how many multiple choice questions they want (each ~1.5 min). Suggest 10–25.`,
+        `You are Elora, a friendly AI assessment builder. User ${state.userName} chose ${mins} minutes for their ${state.purpose} assessment on "${state.role}". Confirm briefly, then ask how many multiple choice questions they want (each ~1.5 min, suggest 10–25). Max 2 sentences. No markdown asterisks — use <strong> for bold.`,
         [{label:'10',val:'10'},{label:'15',val:'15'},{label:'20',val:'20'},{label:'25',val:'25'}],
-        () => addAiMsg(`<strong>${state.role}</strong> — great.<br><br><strong>How many multiple choice questions?</strong> (~1.5 min each)`,
+        () => addAiMsg(`Got it — <strong>${mins} minutes</strong>. I\'ll track the budget as we go.<br><br><strong>How many multiple choice questions?</strong> (~1.5 min each)`,
           [{label:'10',val:'10'},{label:'15',val:'15'},{label:'20',val:'20'},{label:'25',val:'25'}])
       );
       break;
     }
 
+    case 'role': {
+      if (isRandomInput(raw) && raw.length < 3) {
+        clarifyInput('role', display, null,
+          `Just need to know the topic! <strong>What role, skill, or subject should this assessment cover?</strong> (e.g. "DevOps Engineer", "Python", "GDPR compliance")`
+        );
+        return;
+      }
+      state.role = display.trim();
+      state.stage = 'time';
+      askClaude(
+        `You are Elora, a friendly AI assessment builder. User ${state.userName} wants a ${state.purpose} assessment covering "${state.role}". Acknowledge with enthusiasm in one sentence, then ask for the total time limit — mention they can pick from options or type their own. Max 2 sentences. No markdown asterisks — use <strong> for bold.`,
+        [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}],
+        () => addAiMsg(`<strong>${state.role}</strong> — great choice! 🎉<br><br><strong>What\'s the total time limit?</strong> Pick one below or type your own.`,
+          [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}])
+      );
+      break;
+    }
+
     case 'mcq': {
+      if (!hasNumber(raw) || isRandomInput(raw)) {
+        clarifyInput('mcq', display,
+          [{label:'10',val:'10'},{label:'15',val:'15'},{label:'20',val:'20'},{label:'25',val:'25'}],
+          `I need a number for the MCQ count! <strong>How many multiple choice questions would you like?</strong> (~1.5 min each)`,
+        );
+        return;
+      }
       const n = extractNumber(raw, 15);
       state.mcqCount = n;
       const used = Math.round(n * 1.5);
@@ -1328,6 +1591,13 @@ function processStageInput(raw, display) {
     }
 
     case 'descriptive': {
+      if (!hasNumber(raw) && !['none','no','zero','skip'].some(w => raw.toLowerCase().includes(w)) && isRandomInput(raw)) {
+        clarifyInput('descriptive', display,
+          [{label:'1',val:'1'},{label:'2',val:'2'},{label:'3',val:'3'},{label:'None',val:'0'}],
+          `Just need a number here! <strong>How many descriptive questions?</strong> (~10 min each, or say "None")`,
+        );
+        return;
+      }
       const n = extractNumber(raw, 0);
       state.descriptiveCount = n;
       const used = Math.round(state.mcqCount * 1.5) + n * 10;
@@ -1343,6 +1613,13 @@ function processStageInput(raw, display) {
     }
 
     case 'challenges': {
+      if (!hasNumber(raw) && !['none','no','zero','skip'].some(w => raw.toLowerCase().includes(w)) && isRandomInput(raw)) {
+        clarifyInput('challenges', display,
+          [{label:'1 challenge',val:'1'},{label:'2 challenges',val:'2'},{label:'None',val:'0'}],
+          `<strong>How many coding or technical challenges?</strong> (~20 min each, or say "None")`,
+        );
+        return;
+      }
       const n = extractNumber(raw, 0);
       state.challengeCount = n;
       const totalEst = Math.round(state.mcqCount * 1.5) + state.descriptiveCount * 10 + n * 20;
@@ -1447,7 +1724,7 @@ async function askClaude(prompt, chips, fallbackFn) {
     msgDiv.className = 'msg msg-ai';
     const av = document.createElement('div');
     av.className = 'm-av ai-av-c';
-    av.innerHTML = '<i class="ti ti-brain" style="font-size:11px"></i>';
+    av.innerHTML = '<i class="ti ti-sparkles" style="font-size:11px"></i>';
     const bub = document.createElement('div');
     bub.className = 'bub';
     bub.innerHTML = reply;
@@ -1737,21 +2014,12 @@ document.getElementById('crInp').addEventListener('keydown', e => { if (e.key===
 
 // ── CREATOR HEIGHT ────────────────────────────────────────────
 function fixCreatorHeight() {
-  const layout = document.getElementById('crLayout');
-  const tb = layout ? layout.closest('.tb-wrap') || layout.closest('[id^="screen"]') || layout.parentElement : null;
-  if (!layout) return;
-  // Calculate available height: viewport minus topbar
-  const topbar = document.querySelector('.tb');
-  const topH = topbar ? topbar.getBoundingClientRect().bottom : 64;
-  const availH = window.innerHeight - topH;
-  layout.style.height = availH + 'px';
-  const chat = layout.querySelector('.cr-chat');
-  if (chat) chat.style.height = availH + 'px';
+  // Layout handled by CSS flex — no JS needed
 }
 fixCreatorHeight();
-window.addEventListener('resize', fixCreatorHeight);
+// Layout handled by CSS
 // apiBanner hidden — no observer needed
-window.addEventListener('resize', fixCreatorHeight);
+// Layout handled by CSS
 
 // ── COUNTDOWN TIMER ───────────────────────────────────────────
 setInterval(() => {
