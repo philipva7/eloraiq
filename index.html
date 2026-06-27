@@ -1040,7 +1040,30 @@ footer{background:var(--sl900);border-top:0.5px solid rgba(255,255,255,.06);padd
 <script>
 const SB_URL = 'https://jbtwxuxrxuldivtidqcs.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidHd4dXhyeHVsZGl2dGlkcWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTU5NTAsImV4cCI6MjA5Nzg3MTk1MH0.2DikBCmMqomg8v3Fb9sI87ka9_c17qSF96nn0bSCKA0';
-// Email notifications temporarily disabled — backend proxy coming soon
+
+async function sendNotification(email, source) {
+  try {
+    await fetch('/api/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: 'hello@eloraiq.com',
+        subject: '🎉 New waitlist signup — ' + email,
+        html: `<div style="font-family:-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:32px">
+          <h2 style="color:#1a1a2e;margin-bottom:12px">New waitlist signup</h2>
+          <div style="background:#F8F9FA;border-radius:10px;padding:16px 20px;margin-bottom:16px">
+            <div style="font-size:12px;color:#ADB5BD;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Email address</div>
+            <div style="font-size:16px;font-weight:600;color:#1a1a2e">${email}</div>
+          </div>
+          <div style="background:#F8F9FA;border-radius:10px;padding:16px 20px">
+            <div style="font-size:12px;color:#ADB5BD;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Signed up from</div>
+            <div style="font-size:16px;font-weight:600;color:#1a1a2e">${source === 'about' ? 'About page' : 'Homepage'}</div>
+          </div>
+        </div>`
+      })
+    });
+  } catch(e) { console.warn('Notification failed:', e); }
+}
 
 async function joinWaitlist(inputId, successId, formId) {
   const input = document.getElementById(inputId);
@@ -1059,6 +1082,7 @@ async function joinWaitlist(inputId, successId, formId) {
       body: JSON.stringify({ email, source })
     });
     if (res.ok || res.status === 409) {
+      await sendNotification(email, source);
       document.getElementById(formId).style.display = 'none';
       document.getElementById(successId).style.display = 'flex';
     } else { throw new Error(); }
