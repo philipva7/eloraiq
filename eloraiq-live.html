@@ -141,9 +141,9 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
 .a-stat{font-size:11px;color:var(--tx2);text-align:right}
 
 /* CREATOR */
-.cr-layout{display:flex;overflow:hidden}
-.cr-chat{width:400px;min-width:400px;border-right:.5px solid var(--bd1);display:flex;flex-direction:column;background:var(--bg1)}
-.cr-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.cr-layout{display:flex;overflow:hidden;align-items:stretch}
+.cr-chat{width:380px;min-width:380px;max-width:380px;border-right:.5px solid var(--bd1);display:flex;flex-direction:column;background:var(--bg1);overflow:hidden}
+.cr-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto;min-height:0}
 .msg{display:flex;gap:8px}
 .msg-ai .bub{background:var(--bg2);border-radius:0 12px 12px 12px;padding:9px 12px;font-size:13px;line-height:1.6;max-width:300px;color:var(--tx1)}
 .msg-u{flex-direction:row-reverse}
@@ -156,7 +156,7 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
 .quick-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:.5px solid var(--p200);border-radius:10px;background:var(--p50);color:var(--p800);font-size:12px;cursor:pointer;margin:3px 3px 0 0;transition:background .1s;user-select:none}
 .quick-chip:hover{background:var(--p100)}
 .chips-row{display:flex;flex-wrap:wrap;margin-top:6px}
-.cr-footer{padding:10px 13px;border-top:.5px solid var(--bd1);display:flex;gap:8px;align-items:flex-end}
+.cr-footer{padding:10px 13px;border-top:.5px solid var(--bd1);display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
 .cr-inp{flex:1;padding:7px 11px;border-radius:var(--r-md);border:.5px solid var(--bd2);background:var(--bg1);color:var(--tx1);font-size:13px;font-family:inherit;resize:none;outline:none;line-height:1.5;transition:border-color .12s}
 .cr-inp:focus{border-color:#0984E3}
 
@@ -458,7 +458,7 @@ body{font-family:var(--font-sans);background:var(--bg3);color:var(--tx1);font-si
     <button class="btn btn-sm btn-p" onclick="connectApi()"><i class="ti ti-plug"></i> Connect</button>
   </div>
   <div class="tb">
-    <div><div class="tb-title">Elora — Assessment creator <span id="aiLiveBadge" style="display:none;font-size:11px;background:var(--t50);color:var(--t600);padding:2px 8px;border-radius:10px;margin-left:8px;font-weight:500">● Live AI</span></div><div class="tb-sub">Answer one question at a time — Elora IQ builds your assessment as you go</div></div>
+    <div><div class="tb-title">Elora — Assessment creator <span id="aiLiveBadge" style="display:inline-flex;font-size:11px;background:var(--t50);color:var(--t600);padding:2px 8px;border-radius:10px;margin-left:8px;font-weight:500">● Live AI</span></div><div class="tb-sub">Answer one question at a time — Elora IQ builds your assessment as you go</div></div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-sm" id="saveDraftBtn" onclick="saveDraft()"><i class="ti ti-device-floppy"></i> Save draft</button>
       <button class="btn btn-p btn-sm" id="publishBtn" onclick="nav('links')"><i class="ti ti-check"></i> Approve &amp; publish</button>
@@ -877,7 +877,7 @@ function randomCode(len = 6) {
 }
 
 // ── STATE ─────────────────────────────────────────────────────
-let apiKey = '';
+// apiKey handled server-side // API handled server-side
 let timerSecs = 7800;
 let currentAssessmentId = null;
 let assessmentsList = [];
@@ -1140,45 +1140,12 @@ function showCandidateDetail(c) {
   intCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// ── API KEY ───────────────────────────────────────────────────
-function connectApi() {
-  const key = (document.getElementById('apiKeyInp').value || '').trim();
-  if (!key.startsWith('sk-')) { alert('Please enter a valid Anthropic API key starting with sk-ant-…'); return; }
-  apiKey = key;
-  const banner = document.getElementById('apiBanner');
-  banner.className = 'api-banner connected';
-  banner.innerHTML = '<i class="ti ti-check"></i><div class="api-banner-txt">Live AI connected — powered by Claude.</div><button class="btn btn-sm" onclick="disconnectApi()" style="margin-left:auto">Disconnect</button>';
-  document.getElementById('aiLiveBadge').style.display = 'inline-flex';
-  document.getElementById('keyStatusLabel').textContent = 'Connected ✓';
-  fixCreatorHeight();
-}
-
-function disconnectApi() {
-  apiKey = '';
-  const banner = document.getElementById('apiBanner');
-  banner.className = 'api-banner';
-  banner.innerHTML = '<i class="ti ti-key"></i><div class="api-banner-txt">Enter your Anthropic API key to activate the live AI creator.</div><input class="api-key-inp" id="apiKeyInp" type="password" placeholder="sk-ant-api03-…" /><button class="btn btn-sm btn-p" onclick="connectApi()"><i class="ti ti-plug"></i> Connect</button>';
-  document.getElementById('apiKeyInp').addEventListener('keydown', e => { if (e.key === 'Enter') connectApi(); });
-  document.getElementById('aiLiveBadge').style.display = 'none';
-  document.getElementById('keyStatusLabel').textContent = 'Not connected';
-  fixCreatorHeight();
-}
-
-function connectApiFromSettings() {
-  const key = (document.getElementById('settingsApiKey').value || '').trim();
-  if (!key.startsWith('sk-')) { alert('Please enter a valid Anthropic API key.'); return; }
-  const bannerInp = document.getElementById('apiKeyInp');
-  if (bannerInp) { bannerInp.value = key; connectApi(); }
-  else {
-    apiKey = key;
-    document.getElementById('aiLiveBadge').style.display = 'inline-flex';
-    document.getElementById('keyStatusLabel').textContent = 'Connected ✓';
-    const banner = document.getElementById('apiBanner');
-    banner.className = 'api-banner connected';
-    banner.innerHTML = '<i class="ti ti-check"></i><div class="api-banner-txt">Live AI connected — powered by Claude.</div><button class="btn btn-sm" onclick="disconnectApi()" style="margin-left:auto">Disconnect</button>';
-    fixCreatorHeight();
-  }
-}
+// ── API KEY — now handled server-side via /api/ai proxy ─────
+// No API key needed from the user. AI is always active.
+const apiKey = 'proxy';
+function connectApi() {}
+function disconnectApi() {}
+function connectApiFromSettings() {}
 
 // ── CHAT HELPERS ──────────────────────────────────────────────
 function addAiMsg(html, chips) {
@@ -1279,6 +1246,11 @@ function startConversation() {
     [{label:'Hiring',val:'Hiring'},{label:'Internal promotion',val:'Internal promotion'},{label:'Skills certification',val:'Skills certification'},{label:'Compliance testing',val:'Compliance testing'}]
   );
   setSendDisabled(false);
+  requestAnimationFrame(() => {
+    fixCreatorHeight();
+    const msgs = document.getElementById('crMsgs');
+    if (msgs) msgs.scrollTop = 0;
+  });
 }
 
 function chipSelected(val, label) { addUserMsg(label); processStageInput(val, label); }
@@ -1302,13 +1274,15 @@ function processStageInput(raw, display) {
   switch (state.stage) {
 
     case 'purpose': {
-      state.purpose = display.trim();
+      // Clean up raw input — extract a short purpose label if user typed freely
+      const rawPurpose = display.trim();
+      const knownPurposes = ['Hiring','Internal promotion','Skills certification','Compliance testing'];
+      state.purpose = knownPurposes.find(p => rawPurpose.toLowerCase().includes(p.toLowerCase())) || rawPurpose;
       state.stage = 'time';
-      const purposeContext = `a ${state.purpose.toLowerCase()} assessment`;
       askClaude(
-        `User ${state.userName} wants to create ${purposeContext}. Acknowledge warmly by name in one sentence, then ask for the total time limit. Mention they can pick from chips or type their own.`,
+        `You are Elora, a friendly AI assessment builder. The user ${state.userName} said they want: "${rawPurpose}". Understand what kind of assessment they need, give it a short clear label (e.g. "self-assessment", "team skills check"), acknowledge warmly by name in one sentence using that label, then ask for the total time limit mentioning they can pick or type their own. Max 2 sentences.`,
         [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}],
-        () => addAiMsg(`Perfect — let\'s build your <strong>${state.purpose.toLowerCase()}</strong> assessment, <strong>${state.userName}</strong>! 💪<br><br><strong>What\'s the total time limit?</strong> Pick one below or type your own duration.`,
+        () => addAiMsg(`Got it, <strong>${state.userName}</strong>! Let\'s build your <strong>${state.purpose.toLowerCase()}</strong> assessment. 💪<br><br><strong>What\'s the total time limit?</strong> Pick one below or type your own.`,
           [{label:'30 min',val:'30'},{label:'45 min',val:'45'},{label:'60 min',val:'60'},{label:'90 min',val:'90'},{label:'120 min',val:'120'}])
       );
       break;
@@ -1451,14 +1425,12 @@ Keep response to 1-2 sentences, warm and helpful.`;
 
 // ── CLAUDE — CONVERSATIONAL RESPONSES ONLY ────────────────────
 async function askClaude(prompt, chips, fallbackFn) {
-  if (!apiKey) { setTimeout(() => { fallbackFn(); setSendDisabled(false); }, 400); return; }
   showTyping();
   try {
     const r = await fetch('/api/ai', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6', max_tokens: 120,
@@ -1506,9 +1478,10 @@ async function generateAssessment() {
   addAiMsg(`Generating your <strong>${state.role}</strong> assessment and saving to Elora IQ…`);
 
   let assessment;
-  if (apiKey) {
+  try {
     assessment = await generateWithClaude();
-  } else {
+  } catch(e) {
+    console.error('Generation failed, using fallback:', e);
     assessment = generateFallback();
   }
 
@@ -1760,19 +1733,25 @@ document.querySelectorAll('.copy-i').forEach(btn => {
 
 // ── KEYBOARD ──────────────────────────────────────────────────
 document.getElementById('crInp').addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();crSendInp();} });
-document.getElementById('apiKeyInp').addEventListener('keydown', e => { if (e.key==='Enter') connectApi(); });
+// apiKeyInp hidden — handled server-side
 
 // ── CREATOR HEIGHT ────────────────────────────────────────────
 function fixCreatorHeight() {
-  const l = document.getElementById('crLayout');
-  if (!l) return;
-  const banner = document.getElementById('apiBanner');
-  const tb = document.querySelector('#screen-creator .tb');
-  l.style.height = (window.innerHeight - (tb?tb.offsetHeight:57) - (banner?banner.offsetHeight:0)) + 'px';
+  const layout = document.getElementById('crLayout');
+  const tb = layout ? layout.closest('.tb-wrap') || layout.closest('[id^="screen"]') || layout.parentElement : null;
+  if (!layout) return;
+  // Calculate available height: viewport minus topbar
+  const topbar = document.querySelector('.tb');
+  const topH = topbar ? topbar.getBoundingClientRect().bottom : 64;
+  const availH = window.innerHeight - topH;
+  layout.style.height = availH + 'px';
+  const chat = layout.querySelector('.cr-chat');
+  if (chat) chat.style.height = availH + 'px';
 }
 fixCreatorHeight();
 window.addEventListener('resize', fixCreatorHeight);
-new MutationObserver(fixCreatorHeight).observe(document.getElementById('apiBanner'), {childList:true,subtree:true,attributes:true});
+// apiBanner hidden — no observer needed
+window.addEventListener('resize', fixCreatorHeight);
 
 // ── COUNTDOWN TIMER ───────────────────────────────────────────
 setInterval(() => {
