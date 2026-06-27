@@ -1,10 +1,10 @@
 {
   "functions": {
     "api/ai.js": {
-      "runtime": "edge"
+      "maxDuration": 30
     },
     "api/email.js": {
-      "runtime": "edge"
+      "maxDuration": 10
     }
   }
 }
